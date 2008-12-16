@@ -20,6 +20,8 @@ CREATE TABLE tx_kesmallads_smallads (
 	endtime int(11) DEFAULT '0' NOT NULL,
 	fe_group int(11) DEFAULT '0' NOT NULL,
 	cat text NOT NULL,
+	cat2 text NOT NULL,
+	cat3 text NOT NULL,
 	user text NOT NULL,
 	content text NOT NULL,
 	image text NOT NULL,

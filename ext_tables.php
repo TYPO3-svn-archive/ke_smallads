@@ -29,7 +29,7 @@ $TCA["tx_kesmallads_smallads"] = Array (
 		"iconfile" => t3lib_extMgm::extRelPath($_EXTKEY)."icon_tx_kesmallads_smallads.gif",
 	),
 	"feInterface" => Array (
-		"fe_admin_fieldList" => "sys_language_uid, l18n_parent, l18n_diffsource, hidden, starttime, endtime, fe_group, cat, content, image, phone, email, displayemail, title, reviewed",
+		"fe_admin_fieldList" => "sys_language_uid, l18n_parent, l18n_diffsource, hidden, starttime, endtime, fe_group, cat, cat2, cat3, content, image, phone, email, displayemail, title, reviewed",
 	)
 );
 

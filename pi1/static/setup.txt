@@ -122,7 +122,7 @@ plugin.tx_kesmallads_pi1 {
 	# Here the form for the Smallads is configured
 
 	smalladForm {
-		accessibility=1
+		accessibility = 1
 		layout = <div class="smalladform-label">###LABEL###</div><div class="smalladform-field">###FIELD###</div>
 		CHECK.layout = <div class="smalladform-label-check">###FIELD###</div><div class="smalladform-field-check">###LABEL###</div>
 		LABEL.layout = <div class="smalladform-field-label">###FIELD###</div>

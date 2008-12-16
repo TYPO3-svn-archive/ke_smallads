@@ -41,6 +41,7 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 	var $filevar='attachment'; 								// Typo3 forgives that name
 	var $searchmode=0; 										// 0=> full list, 1=> short list, only linked headers; set in the plugin
 	var $siteRelPath;										// Path to this extension from the main directory.
+	var $formName = 'kesmalladsform';						// Name of the HTML-form for new smallads
 	
 	/**
 	 * main function for ke_smallads extension
@@ -141,17 +142,22 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 			if (!is_array($updateRecord)) return '<div class="error_not_allowed">'.$this->pi_getLL('no_allowed_to_update').'</div>';
 		} 
 
+		//debug($this->postVars);
+
 		// Insert the new Ad into the DB / Update the ad
 		// store the category as cleartext, so it can be used in the backend, too
-		$insertFields['cat']			= $this->getCategoryName($this->postVars['cat']);
-		$insertFields['content']		= $this->postVars['content'];
-		$insertFields['phone']			= $this->postVars['phone'];
-		$insertFields['email']			= $this->postVars['email'];
-		$insertFields['displayemail']	= $this->postVars['displayemail'];
-		$insertFields['title']			= $this->postVars['title'];
+		$insertFields['cat']			= $this->sanitizeData($this->getCategoryName($this->postVars['cat'],$this->conf['smalladForm.']['dataArray.']['10.']['valueArray.']));
+		$insertFields['cat2']			= $this->sanitizeData($this->getCategoryName($this->postVars['cat2'],$this->conf['smalladForm.']['dataArray.']['12.']['valueArray.']));
+		$insertFields['cat3']			= $this->sanitizeData($this->postVars['cat3']);
+		$insertFields['content']		= $this->sanitizeData(strip_tags($this->postVars['content']));
+		$insertFields['phone']			= $this->sanitizeData($this->postVars['phone']);
+		$insertFields['email']			= $this->sanitizeData($this->postVars['email']);
+		$insertFields['displayemail']	= $this->sanitizeData($this->postVars['displayemail']);
+		$insertFields['title']			= $this->sanitizeData($this->postVars['title']);
 		$insertFields['reviewed']		= intval($this->conf['markNewAdsAsReviewed']);	
 		$insertFields['iscommercial']	= intval($this->conf['markNewSmalladsAsCommercial']);	
-
+		
+		//debug($insertFields);
 
 		// hide this ad from the beginning on?
 		if (!is_array($updateRecord)) {
@@ -170,7 +176,7 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 		for ($i=1; $i<10; $i++) {
 			if (isset($this->postVars['user'.$i])) {
 				if ($i>1) $insertFields['user'].=',';
-				$insertFields['user'].=$this->postVars['user'.$i];
+				$insertFields['user'].=$this->sanitizeData($this->postVars['user'.$i]);
 			}
 		}
 
@@ -195,7 +201,7 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 		}
 
 		// Do the inserting / updating
-		$fieldList='cat,content,user,image,phone,email,displayemail,title,reviewed,hidden,fe_user_uid,endtime';
+		$fieldList='cat,cat2,cat3,content,user,image,phone,email,displayemail,title,reviewed,hidden,fe_user_uid,endtime';
 		if (!is_array($updateRecord)) {
 			$result=$this->cObj->DBgetInsert($this->table, $this->conf['pidList'] , $insertFields, $fieldList, 1);
 		} else {
@@ -428,6 +434,9 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 		// get Form from static TS
 		$lConf=$this->conf['smalladForm.'];
 
+		// add the form name
+		$lConf['formName'] = $this->formName;
+
 		// Don't allow editing for non-logged-in users
 		if (!$GLOBALS['TSFE']->fe_user && $edituid) return '<div class="error_not_allowed">'.$this->pi_getLL('no_user_logged_in').'</div>';
 		
@@ -471,6 +480,7 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 			// set the 9 user fields
 			$userFieldValues=explode(',',$record['user']);
 			$userFieldNo=0;
+
 			// find the user fields
 			foreach ($this->conf['smalladForm.']['dataArray.'] as $fieldIndex => $fieldConfig ) {
 				// is it a user field?
@@ -516,6 +526,107 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 
 		// render the form
 		$content .= $this->cObj->FORM($lConf); 
+
+		// add some Javascript for the dynamic third category
+		$GLOBALS['TSFE']->additionalHeaderData[$this->prefixId . '_js1'] = $this->renderJavascriptFunctionsForDynamicForm();
+		$content .= $this->renderInlineJavascriptForDynamicForm();
+
+		return $content;
+	}/*}}}*/
+
+	/**
+	 * renderJavascriptFunctionsForDynamicForm 
+	 *
+	 * renders javascript functions for the page header
+	 * 
+	 * @access public
+	 * @return string
+	 */
+	function renderJavascriptFunctionsForDynamicForm() {/*{{{*/
+		$lcObj=t3lib_div::makeInstance('tslib_cObj');
+
+		$content = '';
+
+		// configuration for the second category
+		$cat2_configlist = $this->conf['smalladForm.']['dataArray.']['12.']['valueArray.'];
+
+		// configuration for the subcategory of the second category
+		$cat3_configlist = $this->conf['cat3.'];
+
+		//debug($cat2_configlist);
+		//debug($cat3_configlist);
+
+		if (is_array($cat2_configlist) && count($cat2_configlist) && is_array($cat3_configlist) && count($cat3_configlist)) {
+			$content .= '<script type="text/javascript">' . "\n";
+			$content .= '/* <![CDATA[ */' . "\n";
+
+			// Label and Value List
+			$content .= 'var subCategoryList=new Array();' . "\n";
+
+			// One array function for each category
+			$counter = 0;
+			foreach ($cat2_configlist as $key => $cat2_config) {
+
+				$content .= 'subCategoryList[' . $counter . ']=[';
+
+				// render the subcategories from the list for this category
+				$counter2 = 0;
+				foreach ($cat3_configlist as $key => $cat3_config) {
+					// use only the rows with the configuration (the ones with the "." in the key)
+					if ((strstr($key, '.')) && $cat3_config['belongsTo'] == $cat2_config['value']) {
+						if ($counter2 > 0) {
+							$content .= ',';
+						}
+						$content .= '"' . $lcObj->TEXT($cat3_config) . '|' . $lcObj->TEXT($cat3_config) . '"';
+						$counter2++;
+					}
+				}
+
+				$content .= '];' . "\n";
+				$counter++;
+
+			}
+
+			// the main function
+			$content .= 'function renderSubCat() {' . "\n";
+
+			// empty the select box "third category"
+			$content .= 'document.' . $this->formName . '.cat3.options.length=0;' . "\n";
+
+			// repopulate the select box
+			$content .= 'selectedcat = document.' . $this->formName . '.cat2.selectedIndex;
+for (i=0; i<subCategoryList[selectedcat].length; i++) {
+	document.' . $this->formName . '.cat3.options[document.' . $this->formName . '.cat3.options.length]=new Option(subCategoryList[selectedcat][i].split("|")[0], subCategoryList[selectedcat][i].split("|")[1])
+}';
+			$content .= '}';
+
+			$content .= '/* ]]> */' . "\n";
+			$content .= '</script>' . "\n";
+		}
+
+		return $content;
+	}/*}}}*/
+
+	/**
+	 * renderInlineJavascriptForDynamicForm 
+	 *
+	 * renders on page javascript
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	function renderInlineJavascriptForDynamicForm() {/*{{{*/
+		$content = '<script type="text/javascript">' . "\n";
+		$content .= '/* <![CDATA[ */' . "\n";
+
+		// call the function once to initialize the box
+		$content .= 'renderSubCat();' . "\n";
+
+		// add event-listener the select box
+		$content .= 'document.' . $this->formName . '.cat2.onchange = renderSubCat;' . "\n";
+
+		$content .= '/* ]]> */' . "\n";
+		$content .= '</script>' . "\n";
 
 		return $content;
 	}/*}}}*/
@@ -603,7 +714,7 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 		$items[strval($i)]=$this->pi_getLL('list_mode_1');
 		foreach ($this->conf['smalladForm.']['dataArray.']['10.']['valueArray.'] as $cat ) {
 			$i++;
-			$items[strval($i)]=$this->getCategoryName($cat['value']);
+			$items[strval($i)]=$this->getCategoryName($cat['value'], $this->conf['smalladForm.']['dataArray.']['10.']['valueArray.']);
 		}
 		
 		// Transform integer value of the mode to the cleartext category value
@@ -615,7 +726,7 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 		foreach ($this->conf['smalladForm.']['dataArray.']['10.']['valueArray.'] as $cat) {
 			$i++; 
 			if ($this->piVars['mode']==$i) {
-				$db_whereClause=' AND cat LIKE "%'.$this->getCategoryName($cat['value']).'%"'; 
+				$db_whereClause=' AND cat LIKE "%'.$this->getCategoryName($cat['value'], $this->conf['smalladForm.']['dataArray.']['10.']['valueArray.']).'%"'; 
 			} 
 		}
 
@@ -643,12 +754,6 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 
 		// Put the whole list together
 		$fullTable='';	
-
-		#	$fullTable.=t3lib_div::view_array($this->piVars);	// DEBUG:
-		#	Output the content of $this->piVars for debug purposes. REMEMBER to
-		#	comment out the IP-lock in the debug() function in
-		#	t3lib/config_default.php if nothing happens when you un-comment
-		#	this line!
 
 		// Adds the mode selector (= categories)
 		if (!$edit && $this->conf['showModeSelector'] && !$this->searchmode) {
@@ -701,11 +806,6 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 		return $out;
 	}/*}}}*/
 
-
-
-
-	
-
 	/**
 	 * Lists one Smallad
 	 * $c : rowcounter
@@ -734,7 +834,7 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 					.'<div'.$this->pi_classParam('listdivider').'></div>';
 		} else {
 			// show short results list
-			$urlParameters=array('tx_kesmallads_pi1[sword]'=>$this->postVars['tx_kesmallads_pi1']['sword']);
+			$urlParameters=array('tx_kesmallads_pi1[sword]'=>$this->sanitizeData($this->postVars['tx_kesmallads_pi1']['sword']));
 			return '<div'.$this->pi_classParam('searchresult-shortlist').'>'.$this->pi_linkToPage(htmlspecialchars($this->getFieldContent('title')),$this->target_id,'',$urlParameters).'</div>';
 		}
 	}/*}}}*/
@@ -767,7 +867,8 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 				return $lcObj->TEXT($this->conf['smalladcontent.email.']);
 			break;
 			case "content":
-				return str_replace("\n",'<br />',$this->internal['currentRow'][$fN]);
+				//return str_replace("\n",'<br />',$this->internal['currentRow'][$fN]);
+				return $this->pi_RTEcssText($this->internal['currentRow'][$fN]);
 			break;
 			case "endtime":
 			case "crdate":
@@ -780,16 +881,23 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 	}/*}}}*/
 
 	/**
+	 * getCategoryName 
+	 *
 	 * returns the cleartext value of a category key
 	 * $catkey: Key of a category like stored in the Typoscript Setup
 	 * cat values and labels are found in
 	 * smalladForm.dataArray.10.valueArray.
 	 * check which TS-Index this "cat"-key has and return the matching label
+	 * 
+	 * @param mixed $string 
+	 * @param array $valueArray 
+	 * @access public
+	 * @return void
 	 */
-	function getCategoryName($catkey) {/*{{{*/
+	function getCategoryName($catkey,$valueArray=array()) {/*{{{*/
 		// make a local instance of tslib_cObj
 		$lcObj=t3lib_div::makeInstance('tslib_cObj');
-		foreach ($this->conf['smalladForm.']['dataArray.']['10.']['valueArray.'] as $cat) {
+		foreach ($valueArray as $cat) {
 			// return cat as a TEXT-Element
 			if (strtoupper($cat['value'])==strtoupper($catkey)) {
 				$this->conf['smalladcontent.cat.'] = $cat['label.'];
@@ -797,6 +905,22 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 				return trim($lcObj->TEXT($this->conf['smalladcontent.cat.']));
 			}
 		}
+
+		// return nothing if no matching label has been found (for security reasons)
+		return '';
+	}/*}}}*/
+
+	/**
+	 * sanitizeData
+	 *
+	 * sanitizeData
+	 *
+	 * @param string $data
+	 * @access public
+	 * @return string
+	 */
+	public function sanitizeData($data='') {/*{{{*/
+		return htmlspecialchars($data, ENT_QUOTES, $GLOBALS['TSFE']->renderCharset);
 	}/*}}}*/
 
 	/**
