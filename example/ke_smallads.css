@@ -1,0 +1,106 @@
+/* Class for the whole plugin*/
+.tx-kesmallads-pi1					{ font-size:12px; font-family:Arial; }
+
+/* list view */
+.tx-kesmallads-pi1-listrow			{ clear:both; padding-top:10px;	}
+.tx-kesmallads-pi1-listrow-odd		{ clear:both; padding-top:10px;	}
+.tx-kesmallads-pi1-submitDate 	 	{ font-size:.8em; font-style:italic; }
+.tx-kesmallads-pi1-image 			{ float:left; display:block; }
+.tx-kesmallads-pi1-textcontent		{ margin-left:110px; }
+.tx-kesmallads-pi1-category			{ font-size:1.2em; margin-right:5px; font-style:italic;}
+h2.tx-kesmallads-pi1-title			{ font-size:1.2em; font-weight:bold; margin:0; padding:0 0 .2em 0;}
+.tx-kesmallads-pi1-phone			{ }
+.tx-kesmallads-pi1-email			{ }
+.tx-kesmallads-pi1-content 			{ margin-bottom:10px; padding:0 10px 0 0;}
+.tx-kesmallads-pi1-listdivider 		{ border-bottom:1px dashed black; margin:5px 10px 5px 0; clear:both;}
+
+/* search */
+.tx-kesmallads-pi1-searchbox-sword	{ border:1px solid black; }
+.tx-kesmallads-pi1-searchbox-button { border:1px solid black; }
+
+/* edit */
+.error_not_allowed  				{ color:red; }
+.tx-kesmallads-pi1-deletelink a, 
+.tx-kesmallads-pi1-editlink a 		{ line-height:30px; text-align:center; padding:2px; margin:0 10px 10px 0; width:60px; border:1px dotted; text-decoration:none; color:black; }
+.tx-kesmallads-pi1-editlink a 		{ border-color:green; background:lime;}
+.tx-kesmallads-pi1-deletelink a 	{ border-color:margin; background:red;}
+.tx-kesmallads-pi1-submitDate 	 	{ font-size:.8em; font-style:italic; }
+.tx-kesmallads-pi1-endDate  	 	{ font-size:.8em; font-style:italic; }
+
+/* Pagebrowser */
+.tx-kesmallads-pi1-browsebox {
+	margin:3px;
+	/*border:1px solid black;*/
+	padding:3px;
+	/*background-color:#DDDDDD;*/
+}
+.tx-kesmallads-pi1-browsebox TD {
+	font-size: 10px;
+}
+.tx-kesmallads-pi1-browsebox-strong, .tx-kesmallads-pi1-browsebox-SCell {
+	font-weight: bold;
+}
+.tx-kesmallads-pi1-browsebox-SCell P,.tx-kesmallads-pi1-browsebox TD P{
+	margin:0px;
+}
+
+.tx-kesmallads-pi1-browsebox-SCell {
+	/*background-color: #CCCCCC;*/
+	/*border:1px solid black;*/
+	padding-left:0px; padding-right:3px;
+}
+
+/* teaser view*/
+.tx-kesmallads-pi1-teaser_row		{ margin-top:.5em; }
+.tx-kesmallads-pi1-teaser_cat		{ font-weight:bold; }
+.tx-kesmallads-pi1-teaser_title		{ }
+.tx-kesmallads-pi1-teaser_link		{ font-size:10px; margin-top:3px; display:block;}
+
+/* shortlist view*/
+.tx-kesmallads-pi1-searchresult-shortlist	{ font-size:12px; padding:0 0 0 0; margin:0 0 3px 0; } 
+.tx-kesmallads-pi1-searchresult-noresult	{ font-size:12px; padding:0 0 0 0; margin:0 0 3px 0;}
+
+/* mode selector */
+.tx-kesmallads-pi1-modeSelector	table 													{ }
+.tx-kesmallads-pi1-modeSelector table tbody tr td 										{ background:#CCCCCC; }
+.tx-kesmallads-pi1-modeSelector table tbody tr td.tx-kesmallads-pi1-modeSelector-SCell 	{ background:#DDDDDD; }
+.tx-kesmallads-pi1-modeSelector table tbody tr td p a:link,
+.tx-kesmallads-pi1-modeSelector table tbody tr td p a:visited,
+.tx-kesmallads-pi1-modeSelector table tbody tr td p a:hover 							{ display:block; border-left:1px solid black; border-top:1px solid black; text-decoration:none; color:black;}
+
+
+/* form */
+.tx-kesmallads-pi1 form { }
+.tx-kesmallads-pi1 form .smalladform-label,
+.tx-kesmallads-pi1 form .smalladform-label-label,
+.tx-kesmallads-pi1 form .smalladform-label-check 		{ float:left; clear:left; width:100px; margin-top:5px;}
+.tx-kesmallads-pi1 form .smalladform-label-check 		{ text-align:right; }
+.tx-kesmallads-pi1 form .smalladform-label-req			{ font-weight:bold; }
+.tx-kesmallads-pi1 form .smalladform-field,	
+.tx-kesmallads-pi1 form .smalladform-field-label,	
+.tx-kesmallads-pi1 form .smalladform-field-check 		{ margin-top:5px; }
+.tx-kesmallads-pi1 form .smalladform-field-check 		{ margin-left:100px; }
+.tx-kesmallads-pi1 form .smalladform-field-label 		{ clear:left; margin-left:100px; }
+.tx-kesmallads-pi1 form select  						{ border:1px solid black; margin-bottom:0;}
+.tx-kesmallads-pi1 form file 							{ border:1px solid black; margin-bottom:0;}
+.tx-kesmallads-pi1 form input.inputclass				{ border:1px solid black; margin-bottom:0;}
+.tx-kesmallads-pi1 form input.submitclass				{ border:1px solid black; margin-bottom:0;}
+.tx-kesmallads-pi1 form textarea.inputclass				{ border:1px solid black; margin-bottom:0;}
+
+
+/* These are the styles for the old table layout form.
+ * Just uncomment them, if you still want to use the table layout.
+*/
+
+/*
+.tx-kesmallads-pi1 form table.csc-mailform	{ }
+.tx-kesmallads-pi1 form table.csc-mailform tbody tr td.csc-form-labelcell							{ }
+.tx-kesmallads-pi1 form table.csc-mailform tbody tr td.csc-form-labelcell-check						{ font-size:80%; }
+.tx-kesmallads-pi1 form table.csc-mailform tbody tr td.csc-form-labelcell p.csc-form-label-req		{ font-weight:bold; }
+.tx-kesmallads-pi1 form table.csc-mailform tbody tr td.csc-form-fieldcell 							{ }
+.tx-kesmallads-pi1 form table.csc-mailform tbody tr td.csc-form-fieldcell select 					{ border:1px solid black; }
+.tx-kesmallads-pi1 form table.csc-mailform tbody tr td.csc-form-fieldcell file 						{ border:1px solid black; }
+.tx-kesmallads-pi1 form table.csc-mailform tbody tr td.csc-form-fieldcell input.inputclass			{ border:1px solid black; }
+.tx-kesmallads-pi1 form table.csc-mailform tbody tr td.csc-form-fieldcell input.submitclass			{ border:1px solid black; }
+.tx-kesmallads-pi1 form table.csc-mailform tbody tr td.csc-form-fieldcell textarea.inputclass		{ border:1px solid black; }
+*/

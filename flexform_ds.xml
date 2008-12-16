@@ -1,0 +1,56 @@
+<T3DataStructure>
+	<ROOT>
+		<type>array</type>
+		<el>
+			<mode_selector>
+				<TCEforms>
+					<label>LLL:EXT:ke_smallads/pi1/locallang.php:tt_content.pi_kesmallads.mode_selector</label>
+					<config>
+						<type>select</type>
+						<items>
+							<numIndex index="0">
+								<numIndex index="0">LLL:EXT:ke_smallads/pi1/locallang.php:tt_content.pi_kesmallads.mode.I.0</numIndex>
+								<numIndex index="1">0</numIndex>
+							</numIndex>
+							<numIndex index="1">
+								<numIndex index="0">LLL:EXT:ke_smallads/pi1/locallang.php:tt_content.pi_kesmallads.mode.I.1</numIndex>
+								<numIndex index="1">1</numIndex>
+							</numIndex>
+							<numIndex index="2">
+								<numIndex index="0">LLL:EXT:ke_smallads/pi1/locallang.php:tt_content.pi_kesmallads.mode.I.2</numIndex>
+								<numIndex index="1">2</numIndex>
+							</numIndex>
+							<numIndex index="3">
+								<numIndex index="0">LLL:EXT:ke_smallads/pi1/locallang.php:tt_content.pi_kesmallads.mode.I.3</numIndex>
+								<numIndex index="1">3</numIndex>
+							</numIndex>
+							<numIndex index="4">
+								<numIndex index="0">LLL:EXT:ke_smallads/pi1/locallang.php:tt_content.pi_kesmallads.mode.I.4</numIndex>
+								<numIndex index="1">4</numIndex>
+							</numIndex>
+						</items>
+						<size>1</size>
+					</config>
+				</TCEforms>
+			</mode_selector>
+			<target_id>
+				<TCEforms>
+					<label>LLL:EXT:ke_smallads/pi1/locallang.php:tt_content.pi_kesmallads.target_id</label>
+					<config>
+						<type>input</type>
+						<size>4</size>
+					</config>
+				</TCEforms>
+			</target_id>
+			<no_results_text>
+				<TCEforms>
+					<label>LLL:EXT:ke_smallads/pi1/locallang.php:tt_content.pi_kesmallads.no_results_text</label>
+					<config>
+						<type>input</type>
+						<size>50</size>
+					</config>
+				</TCEforms>
+			</no_results_text>
+		</el>
+	</ROOT>
+</T3DataStructure>

@@ -1,0 +1,289 @@
+plugin.tx_kesmallads_pi1 {
+	
+	# Set the commercial Flag in every new smallad?
+	markNewSmalladsAsCommercial = 0
+
+	# Show submit date in List view?
+	displaySubmitDate = 1
+
+	# Format for displaying the submit date (using the php function "date")
+	submitDateFormat = d.m.Y
+
+	# Order (you may use these values: crdate, title, endtime, cat, uid)
+	listOrder = crdate
+
+	# Descending Flag, set if you want the order to be descending instead of ascending
+	listOrderDescFlag = 1	
+
+	listView {
+		# Results per page
+		results_at_a_time = 10
+
+		# The maximum number of "pages" in the browse-box: "Page 1", "Page 2", etc.
+		maxPages = 10
+	}
+
+	teaserView {
+		# How many Teasers? (was in earlier versions "teaserNum")
+		results_at_a_time = 3
+	}
+	
+	# Notify the Editor of new smallads?
+	notifyEmailEditor = 0
+	notifyEmailEditor {
+		subject = [SMALLAD] New Smallad
+		toEmail =
+		body = A new smallad has been submitted.|Category: %s|Title: %s|Text: %s
+		fromName = Smallads Extension
+		fromEmail =
+	}
+	
+	# Notify the Editor of updated smallads?
+	notifyEmailEditorOnUpdate = 0
+	notifyEmailEditorOnUpdate {
+		subject = [SMALLAD] Updated Smallad
+		toEmail =
+		body = A smallad has been updated.|Category: %s|Title: %s|Text: %s
+		fromName = Smallads Extension
+		fromEmail =
+	}
+
+	# Send an Email to the smallad submitter when he adds an new ad?
+	notifyEmailUser = 0
+	notifyEmailUser {
+		subject = Your Smallad
+		body = Thank you. Your smallad has been submitted.|Category: %s|Title: %s|Text: %s
+		fromName = Smallads
+		fromEmail =
+	}
+	
+	# Send an Email to the smallad submitter when he has updated an ad?
+	notifyEmailUserOnUpdate = 0
+	notifyEmailUserOnUpdate {
+		subject = Your Smallad
+		body = Thank you. Your smallad has been updated.|Category: %s|Title: %s|Text: %s
+		fromName = Smallads
+		fromEmail =
+	}
+	
+	# Linktext for the teaser function of the plugin (TEXT Content Element)
+	linktextTeaserShowAll.value = Show all smallads
+	linktextTeaserShowAll.lang.de = Alle Kleinanzeigen zeigen
+	linktextTeaserShowAll.lang.fr = Afficher toutes les annonces
+	linktextTeaserShowAll.lang.nl = Alle advertenties tonen
+	linktextTeaserShowAll.lang.fi = Näytä kaikki pikkumainokset
+
+	# output text when a new smallad was created (TEXT Content Element)
+	newadCreated.value = A new smallad has been created.
+	newadCreated.lang.de = Eine neue Kleinanzeige wurde angelegt.
+	newadCreated.lang.fr = Une nouvelle annonce a été créée.	
+	newadCreated.lang.nl = Een nieuwe advertentie is aangemaakt.
+	newadCreated.lang.fi = Uusi pienmainos on luotu.	
+
+	# output text when a smallad was updated (TEXT Content Element)
+	newadUpdated.value = The smallad has been updated.
+	newadUpdated.lang.de = Die Kleinanzeige wurde aktualisiert.
+
+	# How many Chars are allowed for the content field? If set to zero, no check is done.
+	ContentMaxChars = 0
+
+	# Output text when there are too many chars in the content-field (TEXT Content Element)
+	ContentTooManyCharsMessage.value = Your smallad is too long.
+	ContentTooManyCharsMessage.lang.de = Der Text Ihrer Kleinanzeige ist zu lang. Bitte gehen Sie zurück und kürzen Sie sie.
+	ContentTooManyCharsMessage.lang.fr = Le texte de votre annonce est trop long. Veuillez le racourcir svp.
+	ContentTooManyCharsMessage.lang.nl = Uw advertentie tekst is te lang.
+	ContentTooManyCharsMessage.lang.fi = Mainoksesi on liian pitkä, ole hyvä ja lyhennä sitä.
+
+	# Should a new ad be hidden at first? Then you have to unhide them manually...
+	hideNewAds = 1
+
+	# Should an updated ad be hidden at first? Then you have to unhide them manually...
+	hideUpdatedAds = 1
+
+	# Should new ads marked as "reviewed", which means "OK"? (important for the export function of the backend module)
+	markNewAdsAsReviewed = 0
+
+	# Should a mode selector (for selecting the categories) be displayed?
+	showModeSelector = 1
+	
+
+	# configuration for image upload
+	checkMime = 0
+	mimeInclude = image/gif,image/jpeg,image/pjpeg
+	mimeExclude = application/octet-stream
+	checkExt = 1
+	extExclude = exe,php,php3
+	extInclude = jpg,jpeg,gif
+	maxsize = 100000
+
+	# path to a "no image available"-image
+	noImageAvailable = 
+	
+	# Here the form for the Smallads is configured
+
+	smalladForm {
+		accessibility=1
+		layout = <div class="smalladform-label">###LABEL###</div><div class="smalladform-field">###FIELD###</div>
+		CHECK.layout = <div class="smalladform-label-check">###FIELD###</div><div class="smalladform-field-check">###LABEL###</div>
+		LABEL.layout = <div class="smalladform-field-label">###FIELD###</div>
+		badMess = Please fill in these fields:
+		params = class="inputclass"
+		params.check = 
+		params.submit = class="submitclass"
+		params.textarea = class="inputclass"
+		REQ = 1
+		REQ.labelWrap.wrap = <span class="smalladform-label-req">|</span>
+
+		
+		# If you want to us the old table layout (maybe because you have a
+		# working site with css and you don't want to change it), uncomment
+		# these lines:
+		
+		#stdWrap.wrap = <table border="0" cellspacing="1" cellpadding="1" class="csc-mailform"> | </table>
+		#layout = <tr><td class="csc-form-labelcell" valign="top">###LABEL###</td><td class="csc-form-fieldcell">###FIELD###</td></tr>
+		#CHECK.layout = <tr><td class="csc-form-fieldcell" align="right" valign="top">###FIELD###</td><td class="csc-form-labelcell-check" valign="top">###LABEL###</td></tr>
+
+		dataArray {
+			1.type = newad=hidden
+			1.value = 1
+
+			# Please don't use indices below 10, they're used from the extension
+
+			# Index no 10 has to be the category, you can change the values, but the index 10 has to stay
+			10 {
+				label = Category
+				label.lang.de = Rubrik
+				label.lang.fr = Catégorie
+				label.lang.nl = Rubriek
+				label.lang.fi = Kategoria
+				type = cat=select
+				required = 1
+				valueArray {
+					10.label = For Sale
+					10.label.lang.de = Verkaufe
+					10.label.lang.fr = A vendre
+					10.label.lang.nl = Aangeboden
+					10.label.lang.fi = Myydään
+					10.value = For Sale
+					20.label = Wanted
+					20.label.lang.de = Suche
+					20.label.lang.fr = Cherche
+					20.label.lang.nl = Gezocht
+					20.label.lang.fi = Ostetaan
+					20.value = Wanted
+					30.label = Miscellaneous
+					30.label.lang.de = Sonstiges
+					30.label.lang.fr = Divers
+					30.label.lang.nl = Diversen
+					30.label.lang.fi = Sekalaista
+					30.value = Miscellaneous
+				}
+			}
+
+			20.label = Title
+			20.label.lang.de = Überschrift
+			20.label.lang.fr = Titre
+			20.label.lang.nl = Titel
+			20.label.lang.fi = Otsikko
+			20.type = title=input,35
+			20.required = 1
+			
+			25.label = Content
+			25.label.lang.de = Anzeigentext
+			25.label.lang.fr = Description
+			25.label.lang.nl = Omschrijving
+			25.label.lang.fi = Kuvaus
+			25.type = content=textarea,30,5
+			25.required = 1
+			
+			28.label = Image
+			28.label.lang.de = Bild
+			28.label.lang.fr = Image
+			28.label.lang.nl = Afbeelding
+			28.label.lang.fi = Kuva
+			28.type = file
+			
+			30.label = Phone
+			30.label.lang.de = Telefon
+			30.label.lang.fr = Téléphone
+			30.label.lang.nl = Telefoon
+			30.label.lang.fi = Puhelinnumero
+			30.type = phone=input,35
+			30.required = 1
+
+			40.label = Email
+			40.label.lang.de = Email
+			40.label.lang.fr = Email
+			40.label.lang.nl = E-mail
+			40.label.lang.fi = S-posti
+			40.type = email=input,35
+			40.required = 1
+			40.specialEval = EMAIL
+			
+			50.label = Should the email address be displayed?<br />If you don't check this field, your email address will only be stored internally.<br />Your phone number will be shown automatically.
+			50.label.lang.de = Soll Ihre Email-Adresse auf unserer Internetseite angezeigt werden?<br />Wenn Sie dieses Feld nicht auswählen, wird Ihre Email-Adresse nur intern gespeichert.<br />Ihre Telefonnummer wird automatisch angezeigt.
+			50.label.lang.fr = Voulez-vous afficher votre adresse e-mail?<br />Si vous ne cochez pas cette case, votre adresse e-mail ne sera pas affichée mais seulement stockée.<br />Votre numéro de téléphone est automatiquement affiché.
+			50.label.lang.nl = Moet het email adres getoond worden?<br />Indien niet aangevinkt, wordt je email adres alleen intern opgeslagen.<br />Je telefoonnummer wordt automatisch getoond.
+			50.label.lang.fi = Näytetäänkö sähköpostiosoite?.<br />Jos et ruksaa tätä kohtaa, sähköpostiosoitteesi tallennetaan sisäisesti.<br />Puhelinnumerosi näytetään automaattisesti.
+			50.type = displayemail=check
+			50.value = 1
+
+			# Set the duration of this smallad.
+			# If you don't want to let the FE user take this choice
+			# just delete these fields. For example, insert in you
+			# typoscript template:
+			# Delete the duration fields
+			# plugin.tx_kesmallads_pi1.smalladForm.dataArray.60 >
+			# plugin.tx_kesmallads_pi1.smalladForm.dataArray.61 >
+			
+			60.type = label
+			60.value = How long do you want to stay your ad online? 
+			60.value.lang.de = Wie lange soll die Anzeige online bleiben?
+
+			61 {
+				label = Duration
+				label.lang.de = Dauer
+				label.lang.fr = Durée
+				type = duration=select
+				required = 1
+				valueArray {
+					10.label = 7 days
+					10.label.lang.de = 7 Tage
+					10.label.lang.fr = 7 jours
+					10.value = 7
+					20.label = 14 days
+					20.label.lang.de = 14 Tage
+					20.label.lang.fr = 14 jours
+					20.value = 14
+					30.label = 30 days
+					30.label.lang.de = 30 Tage
+					30.label.lang.fr = 30 jours
+					30.value = 30
+				}
+			}
+
+			90.type = formtype_mail=submit
+			90.value = Send
+			90.value.lang.de = Abschicken
+			90.value.lang.fr = Envoyer
+			90.value.lang.nl = Versturen
+			90.value.lang.fi = Lähetä
+		}
+	}
+		
+	smalladimage {
+		file.maxW = 100
+		imageLinkWrap = 1
+		imageLinkWrap {
+			enable = 1
+			bodyTag = <BODY style="background-color:black; padding:0; margin:0;">
+			wrap = <A href="javascript:close();"> | </A>
+			JSwindow = 1
+			JSwindow {
+				newWindow = 1
+				expand = 0,0
+			}
+		}
+	}
+
+}
