@@ -71,6 +71,7 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 
 		// get the uid of the target page (->redirect), if not set, use the current page
 		$this->target_id=intval($this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'target_id')) ? intval($this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'target_id')) : $GLOBALS['TSFE']->id;  
+
 		// get the "no search results" text
 		$this->no_results_text=$this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'no_results_text') ? $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'no_results_text') : 'No results.';  
 
@@ -79,6 +80,28 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 			return $this->pi_wrapInBaseClass('<div style="border:1px solid red; background:yellow; padding:1em;">'.
 					$this->pi_getLL('no_static_template').
 					'</div>');
+		}
+
+		// if the dropdown-mode-selector is beeing used: 
+		// check, if the first category has changed. If yes, clear the second
+		// mode selector.
+		// check, if the second category has changed. If yes, clear the third
+		// mode selector.
+		if ($this->conf['showModeSelector'] != 'buttons') {
+			if ($this->piVars['modeselector_cat2'] 
+				&& $this->piVars['modeselector_cat2'] != $this->pi_getLL('list_mode_1')
+				&& $this->piVars['modeselector_cat2'] != $this->piVars['modeselector_cat2_old']
+				) {
+					unset($this->piVars['modeselector_cat3']);
+			}
+			if ($this->piVars['modeselector_cat'] 
+				&& $this->piVars['modeselector_cat'] != $this->pi_getLL('list_mode_1')
+				&& $this->piVars['modeselector_cat'] != $this->piVars['modeselector_cat_old']
+				) {
+					unset($this->piVars['modeselector_cat2']);
+			}
+			$this->piVars['modeselector_cat_old'] = $this->piVars['modeselector_cat'];
+			$this->piVars['modeselector_cat2_old'] = $this->piVars['modeselector_cat2'];
 		}
 		
 		switch($this->mode_selector)	{
@@ -133,6 +156,9 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 		if (intval($this->conf['ContentMaxChars']) > 0) {
 			if (strlen($this->postVars['content']) > intval($this->conf['ContentMaxChars'])) return $lcObj->TEXT($this->conf['ContentTooManyCharsMessage.']);
 		}
+		if (intval($this->conf['ContentAndTitleMaxChars']) > 0) {
+			if (strlen($this->postVars['content']) + strlen($this->postVars['title']) > intval($this->conf['ContentAndTitleMaxChars'])) return $lcObj->TEXT($this->conf['ContentTooManyCharsMessage.']);
+		}
 
 		// Check, if we want to do an update of an existing smallads entry
 		// and if the user is allowed to
@@ -142,22 +168,18 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 			if (!is_array($updateRecord)) return '<div class="error_not_allowed">'.$this->pi_getLL('no_allowed_to_update').'</div>';
 		} 
 
-		//debug($this->postVars);
-
 		// Insert the new Ad into the DB / Update the ad
 		// store the category as cleartext, so it can be used in the backend, too
-		$insertFields['cat']			= $this->sanitizeData($this->getCategoryName($this->postVars['cat'],$this->conf['smalladForm.']['dataArray.']['10.']['valueArray.']));
-		$insertFields['cat2']			= $this->sanitizeData($this->getCategoryName($this->postVars['cat2'],$this->conf['smalladForm.']['dataArray.']['12.']['valueArray.']));
-		$insertFields['cat3']			= $this->sanitizeData($this->postVars['cat3']);
-		$insertFields['content']		= $this->sanitizeData(strip_tags($this->postVars['content']));
-		$insertFields['phone']			= $this->sanitizeData($this->postVars['phone']);
-		$insertFields['email']			= $this->sanitizeData($this->postVars['email']);
-		$insertFields['displayemail']	= $this->sanitizeData($this->postVars['displayemail']);
-		$insertFields['title']			= $this->sanitizeData($this->postVars['title']);
+		$insertFields['cat']			= strip_tags($this->getCategoryName($this->postVars['cat'],$this->conf['smalladForm.']['dataArray.']['10.']['valueArray.']));
+		$insertFields['cat2']			= strip_tags($this->getCategoryName($this->postVars['cat2'],$this->conf['smalladForm.']['dataArray.']['12.']['valueArray.']));
+		$insertFields['cat3']			= strip_tags($this->postVars['cat3']);
+		$insertFields['content']		= strip_tags($this->postVars['content']);
+		$insertFields['phone']			= strip_tags($this->postVars['phone']);
+		$insertFields['email']			= strip_tags($this->postVars['email']);
+		$insertFields['displayemail']	= intval($this->postVars['displayemail']);
+		$insertFields['title']			= strip_tags($this->postVars['title']);
 		$insertFields['reviewed']		= intval($this->conf['markNewAdsAsReviewed']);	
 		$insertFields['iscommercial']	= intval($this->conf['markNewSmalladsAsCommercial']);	
-		
-		//debug($insertFields);
 
 		// hide this ad from the beginning on?
 		if (!is_array($updateRecord)) {
@@ -168,7 +190,7 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 
 		// set duration -> set endtime
 		if (!empty($this->postVars['duration'])) {
-			$insertFields['endtime'] = time() + 24*60*60*(int)$this->postVars['duration'];
+			$insertFields['endtime'] = time() + 24 * 60 * 60 * (int)$this->postVars['duration'];
 		}
 
 		// 9 'user'-fields are checked, they are merged into 'user', comma separated
@@ -176,13 +198,13 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 		for ($i=1; $i<10; $i++) {
 			if (isset($this->postVars['user'.$i])) {
 				if ($i>1) $insertFields['user'].=',';
-				$insertFields['user'].=$this->sanitizeData($this->postVars['user'.$i]);
+				$insertFields['user'] .= $this->postVars['user'.$i];
 			}
 		}
 
 		// if a frontend user is logged in, create the db relation
 		if ($GLOBALS['TSFE']->fe_user->user) {
-			$insertFields['fe_user_uid']=$GLOBALS['TSFE']->fe_user->user['uid']; 
+			$insertFields['fe_user_uid'] = $GLOBALS['TSFE']->fe_user->user['uid']; 
 		}
 		
 		// Handle File Upload
@@ -203,9 +225,9 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 		// Do the inserting / updating
 		$fieldList='cat,cat2,cat3,content,user,image,phone,email,displayemail,title,reviewed,hidden,fe_user_uid,endtime';
 		if (!is_array($updateRecord)) {
-			$result=$this->cObj->DBgetInsert($this->table, $this->conf['pidList'] , $insertFields, $fieldList, 1);
+			$result = $this->cObj->DBgetInsert($this->table, $this->conf['pidList'] , $insertFields, $fieldList, 1);
 		} else {
-			$result=$this->cObj->DBgetUpdate($this->table, $updateRecord['uid'] , $insertFields, $fieldList, 1);
+			$result = $this->cObj->DBgetUpdate($this->table, $updateRecord['uid'] , $insertFields, $fieldList, 1);
 		}
 
 		// Compile Userinfo for notify emails
@@ -710,28 +732,39 @@ for (i=0; i<subCategoryList[selectedcat].length; i++) {
 		// first mode = all categories, text is defined in locallang.php
 		// more modes = categories (defined in the typscript template)
 		$items=array();
-		$i=0;
-		$items[strval($i)]=$this->pi_getLL('list_mode_1');
-		foreach ($this->conf['smalladForm.']['dataArray.']['10.']['valueArray.'] as $cat ) {
-			$i++;
-			$items[strval($i)]=$this->getCategoryName($cat['value'], $this->conf['smalladForm.']['dataArray.']['10.']['valueArray.']);
-		}
+		if ($this->conf['showModeSelector'] == 'buttons') {
+			$i=0;
+			$items[strval($i)]=$this->pi_getLL('list_mode_1');
+			foreach ($this->conf['smalladForm.']['dataArray.']['10.']['valueArray.'] as $cat ) {
+				$i++;
+				$items[strval($i)]=$this->getCategoryName($cat['value'], $this->conf['smalladForm.']['dataArray.']['10.']['valueArray.']);
+			}
+		} 
+
+		// Add some WHERE conditons to the database query ...
+		$db_whereClause = ''; 
 		
+		// Filter the elements according to the mode selector.
 		// Transform integer value of the mode to the cleartext category value
 		// stored in the database. o also could have stored the mode value, but
 		// with the category value, the editor has a cleartext which he can
 		// read in the backend
-		$i=0; 
-		$db_whereClause=''; 
-		foreach ($this->conf['smalladForm.']['dataArray.']['10.']['valueArray.'] as $cat) {
-			$i++; 
-			if ($this->piVars['mode']==$i) {
-				$db_whereClause=' AND cat LIKE "%'.$this->getCategoryName($cat['value'], $this->conf['smalladForm.']['dataArray.']['10.']['valueArray.']).'%"'; 
-			} 
+		if ($this->conf['showModeSelector'] == 'buttons') {
+			$i=0; 
+			foreach ($this->conf['smalladForm.']['dataArray.']['10.']['valueArray.'] as $cat) {
+				$i++; 
+				if ($this->piVars['mode']==$i) {
+					$db_whereClause=' AND cat LIKE "%'.$this->getCategoryName($cat['value'], $this->conf['smalladForm.']['dataArray.']['10.']['valueArray.']).'%"'; 
+				} 
+			}
+		} else {
+			$db_whereClause .= $this->dropdownModeSelectorFilter();
 		}
 
-		// Find only smallads of this FE User
-		if ($edit) $db_whereClause .= ' AND fe_user_uid='.$GLOBALS['TSFE']->fe_user->user['uid'];
+		// Find only smallads of this FE User if the "edit"-mode is selected
+		if ($edit) {
+			$db_whereClause .= ' AND fe_user_uid='.$GLOBALS['TSFE']->fe_user->user['uid'];
+		}
 
 		// Initializing the query parameters
 		$this->internal['orderBy'] 				= $this->conf['listOrder'];
@@ -744,34 +777,188 @@ for (i=0; i<subCategoryList[selectedcat].length; i++) {
 		// Get number of Smallads
 		$res=$this->pi_exec_query($this->table,1,$db_whereClause);
 		list($this->internal['res_count'])=$GLOBALS['TYPO3_DB']->sql_fetch_row($res);
-		
-		// Print message if no results found
-		if (!$this->internal['res_count']) return '<div'.$this->pi_classParam('searchresult-noresult').'>'.$this->no_results_text.'</div>';
-		
-		// Make listing query, pass query to SQL database:
-		$res=$this->pi_exec_query($this->table,0,$db_whereClause);
-		$this->internal['currentTable']=$this->table;
 
 		// Put the whole list together
 		$fullTable='';	
+		
+		// Make listing query, pass query to SQL database:
+		$res = $this->pi_exec_query($this->table,0,$db_whereClause);
+		$this->internal['currentTable'] = $this->table;
+
+		// start the form for the mode selector and the searchbox
+		$fullTable .= '<form action="' . $this->pi_linkTP_keepPIvars_url() . '" method="POST">';
 
 		// Adds the mode selector (= categories)
 		if (!$edit && $this->conf['showModeSelector'] && !$this->searchmode) {
-			$fullTable.=$this->pi_list_modeSelector($items); 
+			if ($this->conf['showModeSelector'] == 'buttons') {
+				$fullTable .= $this->pi_list_modeSelector($items); 
+			} else {
+				$fullTable .= $this->renderDropdownModeSelector($res); 
+			}
 		}
 
 		// Adds the search box:
-		if (!$edit && !$this->searchmode) $fullTable.=$this->pi_list_searchBox();
+		if (!$edit && !$this->searchmode) {
+			//$fullTable .= $this->pi_list_searchBox();
+			$fullTable .= $this->renderSearchBox();
+		}
 
-		// Adds the whole list table
-		$fullTable.=$this->pi_list_makelist($res,$edit);
+		// End the form for the searchbox and the mode selector
+		$fullTable .= '</form>';
 
-		// Adds the result browser:
-		if (!$this->searchmode) $fullTable.=$this->pi_list_browseresults();
+		// Print message if no results found
+		if (!$this->internal['res_count']) {
+			$fullTable .= '<div'.$this->pi_classParam('searchresult-noresult').'>'.$this->no_results_text.'</div>';
+		} else {
+			// Adds the whole list table
+			$fullTable .= $this->pi_list_makelist($res,$edit);
+
+			// Adds the result browser:
+			if (!$this->searchmode) {
+				$fullTable .= $this->pi_list_browseresults();
+			}
+		}
 
 		// Returns the content from the plugin.
 		return $fullTable; 
 	}/*}}}*/
+
+	/**
+	 * dropdownModeSelectorFilter 
+	 *
+	 * compiles the where clause used for filtering the elements selected by
+	 * the dropdown mode selector.
+	 * 
+	 * @param string $modes
+	 * @access public
+	 * @return string
+	 */
+	function dropdownModeSelectorFilter($queryForModes = 'all') {/*{{{*/
+		$db_whereClause = '';
+		$modes = array(
+			'modeselector_cat' => 'cat',
+			'modeselector_cat2' => 'cat2',
+			'modeselector_cat3' => 'cat3'
+		);
+		foreach ($modes as $modeSelector => $dbFieldName) {
+			if (($queryForModes == 'all' || stristr($queryForModes, $modeSelector)) && $this->piVars[$modeSelector] && $this->piVars[$modeSelector] != $this->pi_getLL('list_mode_1')) {
+				$db_whereClause .= ' AND ' . $dbFieldName . ' LIKE "%' . $this->sanitizeData($this->piVars[$modeSelector]) . '%"'; 
+			}
+		}
+		return $db_whereClause;
+	}/*}}}*/
+
+	/**
+	 * renderSearchBox 
+	 * 
+	 * @access public
+	 * @return string
+	 */
+	function renderSearchBox() {/*{{{*/
+		$content = '';
+		$content .= '<input type="text" name="tx_kesmallads_pi1[sword]" value="' . htmlspecialchars($this->piVars['sword']) . '" class="tx-kesmallads-pi1-searchbox-sword" />';
+		$content .= '<input type="submit" value="' . $this->pi_getLL('pi_list_searchBox_search') . '" class="tx-kesmallads-pi1-searchbox-button" /><input type="hidden" name="no_cache" value="1" /><input type="hidden" name="tx_kesmallads_pi1[pointer]" value="" />';
+		return $content;
+	}/*}}}*/
+
+	/**
+	 * renderDropdownModeSelector 
+	 *
+	 * Renders a mode selector with all three categoy-types, the third category depends
+	 * on the second one and changes dynamically.
+	 * 
+	 * @access public
+	 * @return string
+	 */
+	function renderDropdownModeSelector() {
+		$lcObj=t3lib_div::makeInstance('tslib_cObj');
+		$content = '';
+
+		// get all the first and second categories for which we have elements
+		// and compile a comma separated list
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', $this->table, 'pid IN (' . $this->conf['pidList'] . ')' . $lcObj->enableFields($this->table));
+		$cat1_list = '';
+		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+			if ($row['cat']) {
+				$cat1_list .= $row['cat'] . ',';
+			}
+		}
+		$cat1_list = t3lib_div::uniqueList($cat1_list);
+
+		// for the second category get only the entries which belong to the
+		// already selected first one
+		$cat2_list = '';
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', $this->table, 'pid IN (' . $this->conf['pidList'] . ')' . $this->dropdownModeSelectorFilter('modeselector_cat') . $lcObj->enableFields($this->table));
+		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+			if ($row['cat2']) {
+				$cat2_list .= $row['cat2'] . ',';
+			}
+		}
+		$cat2_list = t3lib_div::uniqueList($cat2_list);
+
+		// for the third category get only the entries which belong to the
+		// already selected second one
+		$cat3_list = '';
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', $this->table, 'pid IN (' . $this->conf['pidList'] . ')' . $this->dropdownModeSelectorFilter() . $lcObj->enableFields($this->table));
+		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+			if ($row['cat3']) {
+				$cat3_list .= $row['cat3'] . ',';
+			}
+		}
+		$cat3_list = t3lib_div::uniqueList($cat3_list);
+
+		debug($this->piVars);
+
+		// Categories are stored as real names in the databases, so we
+		// can use them directly as values for the select field
+		if ($cat1_list) {
+			$content .= '<select name="' . $this->prefixId . '[modeselector_cat]" id="kesmalladsform_modeselector1" size="1" class="modeselector_selectclass">';
+					
+			if (count(t3lib_div::trimExplode(',', $cat1_list)) > 1) {
+				$content .= '<option value="' . $this->pi_getLL('list_mode_1') . '">' . $this->pi_getLL('list_mode_1') . '</option>';
+			}
+			foreach(t3lib_div::trimExplode(',', $cat1_list) as $key => $value) {
+				$selected = $this->piVars['modeselector_cat'] == $value ? ' selected' : '';
+				$content .= '<option value="' . $value . '"' . $selected . '>' . $value . '</option>';
+			}
+			$content .= '</select>';
+		}
+
+		if ($cat2_list) {
+			$content .= '<select name="' . $this->prefixId . '[modeselector_cat2]" id="kesmalladsform_modeselector2" size="1" class="modeselector_selectclass">';
+			if (count(t3lib_div::trimExplode(',', $cat2_list)) > 1) {
+				$content .= '<option value="' . $this->pi_getLL('list_mode_1') . '">' . $this->pi_getLL('list_mode_1') . '</option>';
+			}
+			foreach(t3lib_div::trimExplode(',', $cat2_list) as $key => $value) {
+				$selected = $this->piVars['modeselector_cat2'] == $value ? ' selected' : '';
+				$content .= '<option value="' . $value . '"' . $selected . '>' . $value . '</option>';
+			}
+			$content .= '</select>';
+		}
+
+		// the third category only makes sense if the second has been selected
+		if ($this->piVars['modeselector_cat2'] && $this->piVars['modeselector_cat2'] != $this->pi_getLL('list_mode_1')) {
+			if ($cat3_list) {
+				$content .= '<select name="' . $this->prefixId . '[modeselector_cat3]" id="kesmalladsform_modeselector3" size="1" class="modeselector_selectclass">';
+				if (count(t3lib_div::trimExplode(',', $cat3_list)) > 1) {
+					$content .= '<option value="' . $this->pi_getLL('list_mode_1') . '">' . $this->pi_getLL('list_mode_1') . '</option>';
+				}
+				foreach(t3lib_div::trimExplode(',', $cat3_list) as $key => $value) {
+					$selected = $this->piVars['modeselector_cat3'] == $value ? ' selected' : '';
+					$content .= '<option value="' . $value . '"' . $selected . '>' . $value . '</option>';
+				}
+				$content .= '</select>';
+			}
+		}
+
+		//debug($cat1_list);
+		//debug($cat2_list);
+		//debug($cat3_list);
+
+		// get all the categories we have entries for
+		// category 1
+		return $content;
+	}
 
 	/**
 	 * This function comes from tslib_pibase, I implemented it here, because I don't want to have any table-Tags in my list view,
@@ -834,7 +1021,7 @@ for (i=0; i<subCategoryList[selectedcat].length; i++) {
 					.'<div'.$this->pi_classParam('listdivider').'></div>';
 		} else {
 			// show short results list
-			$urlParameters=array('tx_kesmallads_pi1[sword]'=>$this->sanitizeData($this->postVars['tx_kesmallads_pi1']['sword']));
+			$urlParameters=array('tx_kesmallads_pi1[sword]'=>$this->postVars['tx_kesmallads_pi1']['sword']);
 			return '<div'.$this->pi_classParam('searchresult-shortlist').'>'.$this->pi_linkToPage(htmlspecialchars($this->getFieldContent('title')),$this->target_id,'',$urlParameters).'</div>';
 		}
 	}/*}}}*/
@@ -911,19 +1098,6 @@ for (i=0; i<subCategoryList[selectedcat].length; i++) {
 	}/*}}}*/
 
 	/**
-	 * sanitizeData
-	 *
-	 * sanitizeData
-	 *
-	 * @param string $data
-	 * @access public
-	 * @return string
-	 */
-	public function sanitizeData($data='') {/*{{{*/
-		return htmlspecialchars($data, ENT_QUOTES, $GLOBALS['TSFE']->renderCharset);
-	}/*}}}*/
-
-	/**
 	 * OBSOLETE -- categories are now configured via ts
 	 * Get Values for select-fields from locallang.php (Of course, normally you
 	 * would configure such things via flexforms or typoscript But I didn't
@@ -940,6 +1114,19 @@ for (i=0; i<subCategoryList[selectedcat].length; i++) {
 			$i++;
 		}
 		return $lConf;
+	}/*}}}*/
+
+	/**
+	 * sanitizeData
+	 *
+	 * sanitizeData
+	 *
+	 * @param string $data
+	 * @access public
+	 * @return string
+	 */
+	public function sanitizeData($data='') {/*{{{*/
+		return htmlspecialchars($data, ENT_QUOTES, $GLOBALS['TSFE']->renderCharset);
 	}/*}}}*/
 	
 }

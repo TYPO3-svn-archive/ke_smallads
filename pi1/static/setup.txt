@@ -105,7 +105,12 @@ plugin.tx_kesmallads_pi1 {
 
 	# Should a mode selector (for selecting the categories) be displayed?
 	showModeSelector = 1
-	
+
+	# Which mode selector do we want to be shown?
+	# Possible values are: 
+	# buttons (This is the default style mode selector.)
+	# dropdown (This is the more advanced mode selector which also shows the second category and the subcateogories.)
+	showModeSelector = dropdown
 
 	# configuration for image upload
 	checkMime = 0
