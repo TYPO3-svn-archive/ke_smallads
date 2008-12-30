@@ -575,9 +575,6 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 		// configuration for the subcategory of the second category
 		$cat3_configlist = $this->conf['cat3.'];
 
-		//debug($cat2_configlist);
-		//debug($cat3_configlist);
-
 		if (is_array($cat2_configlist) && count($cat2_configlist) && is_array($cat3_configlist) && count($cat3_configlist)) {
 			$content .= '<script type="text/javascript">' . "\n";
 			$content .= '/* <![CDATA[ */' . "\n";
@@ -833,7 +830,7 @@ for (i=0; i<subCategoryList[selectedcat].length; i++) {
 	 * @access public
 	 * @return string
 	 */
-	function dropdownModeSelectorFilter($queryForModes = 'all') {/*{{{*/
+	function dropdownModeSelectorFilter($queryForMode = 'all') {/*{{{*/
 		$db_whereClause = '';
 		$modes = array(
 			'modeselector_cat' => 'cat',
@@ -841,7 +838,7 @@ for (i=0; i<subCategoryList[selectedcat].length; i++) {
 			'modeselector_cat3' => 'cat3'
 		);
 		foreach ($modes as $modeSelector => $dbFieldName) {
-			if (($queryForModes == 'all' || stristr($queryForModes, $modeSelector)) && $this->piVars[$modeSelector] && $this->piVars[$modeSelector] != $this->pi_getLL('list_mode_1')) {
+			if (($queryForMode == 'all' || $queryForMode == $modeSelector) && $this->piVars[$modeSelector] && $this->piVars[$modeSelector] != $this->pi_getLL('list_mode_1')) {
 				$db_whereClause .= ' AND ' . $dbFieldName . ' LIKE "%' . $this->sanitizeData($this->piVars[$modeSelector]) . '%"'; 
 			}
 		}
@@ -899,15 +896,13 @@ for (i=0; i<subCategoryList[selectedcat].length; i++) {
 		// for the third category get only the entries which belong to the
 		// already selected second one
 		$cat3_list = '';
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', $this->table, 'pid IN (' . $this->conf['pidList'] . ')' . $this->dropdownModeSelectorFilter() . $lcObj->enableFields($this->table));
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', $this->table, 'pid IN (' . $this->conf['pidList'] . ')' . $this->dropdownModeSelectorFilter('modeselector_cat2') . $lcObj->enableFields($this->table));
 		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 			if ($row['cat3']) {
 				$cat3_list .= $row['cat3'] . ',';
 			}
 		}
 		$cat3_list = t3lib_div::uniqueList($cat3_list);
-
-		debug($this->piVars);
 
 		// Categories are stored as real names in the databases, so we
 		// can use them directly as values for the select field
@@ -944,18 +939,15 @@ for (i=0; i<subCategoryList[selectedcat].length; i++) {
 			}
 		}
 
-		//debug($cat1_list);
-		//debug($cat2_list);
-		//debug($cat3_list);
-
 		// get all the categories we have entries for
 		// category 1
 		return $content;
 	}
 
 	/**
-	 * This function comes from tslib_pibase, I implemented it here, because I don't want to have any table-Tags in my list view,
-	 * which are normaly rendered from pi_mlist_makelist.
+	 * This one comes from tslib_pibase, I implemented it here, because I
+	 * don't want to have any table-Tags in my list view, which are normaly
+	 * rendered from pi_mlist_makelist.
 	 * 
 	 * Returns the list of items based on the input SQL result pointer
 	 * For each result row the internal var, $this->internal['currentRow'], is set with the row returned.
