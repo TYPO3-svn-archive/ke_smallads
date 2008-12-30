@@ -913,10 +913,7 @@ for (i=0; i<subCategoryList[selectedcat].length; i++) {
 		// can use them directly as values for the select field
 		if ($cat1_list) {
 			$content .= '<select name="' . $this->prefixId . '[modeselector_cat]" id="kesmalladsform_modeselector1" size="1" class="modeselector_selectclass">';
-					
-			if (count(t3lib_div::trimExplode(',', $cat1_list)) > 1) {
-				$content .= '<option value="' . $this->pi_getLL('list_mode_1') . '">' . $this->pi_getLL('list_mode_1') . '</option>';
-			}
+			$content .= '<option value="' . $this->pi_getLL('list_mode_1') . '">' . $this->pi_getLL('list_mode_1') . '</option>';
 			foreach(t3lib_div::trimExplode(',', $cat1_list) as $key => $value) {
 				$selected = $this->piVars['modeselector_cat'] == $value ? ' selected' : '';
 				$content .= '<option value="' . $value . '"' . $selected . '>' . $value . '</option>';
@@ -926,9 +923,7 @@ for (i=0; i<subCategoryList[selectedcat].length; i++) {
 
 		if ($cat2_list) {
 			$content .= '<select name="' . $this->prefixId . '[modeselector_cat2]" id="kesmalladsform_modeselector2" size="1" class="modeselector_selectclass">';
-			if (count(t3lib_div::trimExplode(',', $cat2_list)) > 1) {
-				$content .= '<option value="' . $this->pi_getLL('list_mode_1') . '">' . $this->pi_getLL('list_mode_1') . '</option>';
-			}
+			$content .= '<option value="' . $this->pi_getLL('list_mode_1') . '">' . $this->pi_getLL('list_mode_1') . '</option>';
 			foreach(t3lib_div::trimExplode(',', $cat2_list) as $key => $value) {
 				$selected = $this->piVars['modeselector_cat2'] == $value ? ' selected' : '';
 				$content .= '<option value="' . $value . '"' . $selected . '>' . $value . '</option>';
@@ -940,9 +935,7 @@ for (i=0; i<subCategoryList[selectedcat].length; i++) {
 		if ($this->piVars['modeselector_cat2'] && $this->piVars['modeselector_cat2'] != $this->pi_getLL('list_mode_1')) {
 			if ($cat3_list) {
 				$content .= '<select name="' . $this->prefixId . '[modeselector_cat3]" id="kesmalladsform_modeselector3" size="1" class="modeselector_selectclass">';
-				if (count(t3lib_div::trimExplode(',', $cat3_list)) > 1) {
-					$content .= '<option value="' . $this->pi_getLL('list_mode_1') . '">' . $this->pi_getLL('list_mode_1') . '</option>';
-				}
+				$content .= '<option value="' . $this->pi_getLL('list_mode_1') . '">' . $this->pi_getLL('list_mode_1') . '</option>';
 				foreach(t3lib_div::trimExplode(',', $cat3_list) as $key => $value) {
 					$selected = $this->piVars['modeselector_cat3'] == $value ? ' selected' : '';
 					$content .= '<option value="' . $value . '"' . $selected . '>' . $value . '</option>';
@@ -1084,12 +1077,14 @@ for (i=0; i<subCategoryList[selectedcat].length; i++) {
 	function getCategoryName($catkey,$valueArray=array()) {/*{{{*/
 		// make a local instance of tslib_cObj
 		$lcObj=t3lib_div::makeInstance('tslib_cObj');
-		foreach ($valueArray as $cat) {
-			// return cat as a TEXT-Element
-			if (strtoupper($cat['value'])==strtoupper($catkey)) {
-				$this->conf['smalladcontent.cat.'] = $cat['label.'];
-				$this->conf['smalladcontent.cat.']['value'] = $cat['label'];
-				return trim($lcObj->TEXT($this->conf['smalladcontent.cat.']));
+		if (is_array($valueArray)) {
+			foreach ($valueArray as $cat) {
+				// return cat as a TEXT-Element
+				if (strtoupper($cat['value'])==strtoupper($catkey)) {
+					$this->conf['smalladcontent.cat.'] = $cat['label.'];
+					$this->conf['smalladcontent.cat.']['value'] = $cat['label'];
+					return trim($lcObj->TEXT($this->conf['smalladcontent.cat.']));
+				}
 			}
 		}
 

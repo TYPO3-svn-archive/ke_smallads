@@ -197,7 +197,7 @@ plugin.tx_kesmallads_pi1 {
 			12 {
 				label = Category
 				label.lang.de = Rubrik
-				label.lang.fr = Cat?gorie
+				label.lang.fr = Catégorie
 				label.lang.nl = Rubriek
 				label.lang.fi = Kategoria
 				type = cat2=select
@@ -345,7 +345,7 @@ plugin.tx_kesmallads_pi1 {
 		
 		5 = TEXT
 		5.value = Strawberries
-		5.lang.de = Strawberries
+		5.lang.de = Erdbeeren
 		5.belongsTo = strawberries
 	}
 		
