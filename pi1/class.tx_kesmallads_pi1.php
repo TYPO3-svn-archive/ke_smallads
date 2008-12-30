@@ -89,16 +89,15 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 		// mode selector.
 		if ($this->conf['modeSelectorType'] != 'buttons') {
 			if ($this->piVars['modeselector_cat2'] 
-				&& $this->piVars['modeselector_cat2'] != $this->pi_getLL('list_mode_1')
 				&& $this->piVars['modeselector_cat2'] != $this->piVars['modeselector_cat2_old']
 				) {
 					unset($this->piVars['modeselector_cat3']);
 			}
 			if ($this->piVars['modeselector_cat'] 
-				&& $this->piVars['modeselector_cat'] != $this->pi_getLL('list_mode_1')
 				&& $this->piVars['modeselector_cat'] != $this->piVars['modeselector_cat_old']
 				) {
 					unset($this->piVars['modeselector_cat2']);
+					unset($this->piVars['modeselector_cat3']);
 			}
 			$this->piVars['modeselector_cat_old'] = $this->piVars['modeselector_cat'];
 			$this->piVars['modeselector_cat2_old'] = $this->piVars['modeselector_cat2'];
