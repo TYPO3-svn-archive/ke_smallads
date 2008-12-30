@@ -87,7 +87,7 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 		// mode selector.
 		// check, if the second category has changed. If yes, clear the third
 		// mode selector.
-		if ($this->conf['showModeSelector'] != 'buttons') {
+		if ($this->conf['modeSelectorType'] != 'buttons') {
 			if ($this->piVars['modeselector_cat2'] 
 				&& $this->piVars['modeselector_cat2'] != $this->pi_getLL('list_mode_1')
 				&& $this->piVars['modeselector_cat2'] != $this->piVars['modeselector_cat2_old']
@@ -732,7 +732,7 @@ for (i=0; i<subCategoryList[selectedcat].length; i++) {
 		// first mode = all categories, text is defined in locallang.php
 		// more modes = categories (defined in the typscript template)
 		$items=array();
-		if ($this->conf['showModeSelector'] == 'buttons') {
+		if ($this->conf['modeSelectorType'] == 'buttons') {
 			$i=0;
 			$items[strval($i)]=$this->pi_getLL('list_mode_1');
 			foreach ($this->conf['smalladForm.']['dataArray.']['10.']['valueArray.'] as $cat ) {
@@ -749,7 +749,7 @@ for (i=0; i<subCategoryList[selectedcat].length; i++) {
 		// stored in the database. o also could have stored the mode value, but
 		// with the category value, the editor has a cleartext which he can
 		// read in the backend
-		if ($this->conf['showModeSelector'] == 'buttons') {
+		if ($this->conf['modeSelectorType'] == 'buttons') {
 			$i=0; 
 			foreach ($this->conf['smalladForm.']['dataArray.']['10.']['valueArray.'] as $cat) {
 				$i++; 
@@ -790,7 +790,7 @@ for (i=0; i<subCategoryList[selectedcat].length; i++) {
 
 		// Adds the mode selector (= categories)
 		if (!$edit && $this->conf['showModeSelector'] && !$this->searchmode) {
-			if ($this->conf['showModeSelector'] == 'buttons') {
+			if ($this->conf['modeSelectorType'] == 'buttons') {
 				$fullTable .= $this->pi_list_modeSelector($items); 
 			} else {
 				$fullTable .= $this->renderDropdownModeSelector($res); 
