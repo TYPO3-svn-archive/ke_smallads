@@ -87,17 +87,22 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 		// mode selector.
 		// check, if the second category has changed. If yes, clear the third
 		// mode selector.
+		if (!$this->piVars['modeselector_cat_old']) {
+			$this->piVars['modeselector_cat_old'] = $this->pi_getLL('list_mode_1');
+		}
+		if (!$this->piVars['modeselector_cat2_old']) {
+			$this->piVars['modeselector_cat2_old'] = $this->pi_getLL('list_mode_1');
+		}
+		if (!$this->piVars['modeselector_cat3_old']) {
+			$this->piVars['modeselector_cat3_old'] = $this->pi_getLL('list_mode_1');
+		}
 		if ($this->conf['modeSelectorType'] != 'buttons') {
-			if ($this->piVars['modeselector_cat2'] 
-				&& $this->piVars['modeselector_cat2'] != $this->piVars['modeselector_cat2_old']
-				) {
-					unset($this->piVars['modeselector_cat3']);
+			if ($this->piVars['modeselector_cat'] && $this->piVars['modeselector_cat'] != $this->piVars['modeselector_cat_old']) {
+				unset($this->piVars['modeselector_cat2']);
+				unset($this->piVars['modeselector_cat3']);
 			}
-			if ($this->piVars['modeselector_cat'] 
-				&& $this->piVars['modeselector_cat'] != $this->piVars['modeselector_cat_old']
-				) {
-					unset($this->piVars['modeselector_cat2']);
-					unset($this->piVars['modeselector_cat3']);
+			if ($this->piVars['modeselector_cat2'] && $this->piVars['modeselector_cat2'] != $this->piVars['modeselector_cat2_old']) {
+				unset($this->piVars['modeselector_cat3']);
 			}
 			$this->piVars['modeselector_cat_old'] = $this->piVars['modeselector_cat'];
 			$this->piVars['modeselector_cat2_old'] = $this->piVars['modeselector_cat2'];
@@ -730,7 +735,7 @@ for (i=0; i<subCategoryList[selectedcat].length; i++) {
 		$items=array();
 		if ($this->conf['modeSelectorType'] == 'buttons') {
 			$i=0;
-			$items[strval($i)]=$this->pi_getLL('list_mode_1');
+			$items[strval($i)] = $this->pi_getLL('list_mode_1');
 			foreach ($this->conf['smalladForm.']['dataArray.']['10.']['valueArray.'] as $cat ) {
 				$i++;
 				$items[strval($i)]=$this->getCategoryName($cat['value'], $this->conf['smalladForm.']['dataArray.']['10.']['valueArray.']);
