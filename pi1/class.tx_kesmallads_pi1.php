@@ -880,6 +880,11 @@ for (i=0; i<subCategoryList[selectedcat].length; i++) {
 
 			// Adds the result browser:
 			if (!$this->searchmode) {
+
+				// Initialize the browsebox
+				$this->internal['pagefloat']			= 'center';
+				$this->internal['dontLinkActivePage']	= '1';
+
 				$fullTable .= $this->pi_list_browseresults();
 			}
 		}
