@@ -90,7 +90,7 @@ $LOCAL_LANG = Array (
 		'visible_until' => 'Sichtbar bis: ',
 		'maxchars_begin' => 'Sie haben noch ',
 		'maxchars_end' => ' Zeichen übrig.',
-		'phone_or_email_has_to_be_filled_out' => 'Bitte geben Sie entweder Ihre Telefonnummer oder Ihre E-Mail-Adresse an..',
+		'phone_or_email_has_to_be_filled_out' => 'Bitte geben Sie entweder Ihre Telefonnummer oder Ihre E-Mail-Adresse an.',
 		'email_address_not_valid' => 'Die E-Mail-Adresse ist ungültig.',
 	),
 	'no' => Array (
