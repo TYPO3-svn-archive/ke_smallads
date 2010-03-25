@@ -42,7 +42,7 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 	var $searchmode=0; 										// 0=> full list, 1=> short list, only linked headers; set in the plugin
 	var $siteRelPath;										// Path to this extension from the main directory.
 	var $formName = 'kesmalladsform';						// Name of the HTML-form for new smallads
-	
+
 	/**
 	 * main function for ke_smallads extension
 	 */
@@ -66,23 +66,23 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 		$this->pi_loadLL();				// Loading the LOCAL_LANG values
 		$this->pi_USER_INT_obj=1;		// Configuring so caching is not expected. This value means that no cHash params are ever set. We do this, because it's a USER_INT object!
 
-		// get the flexform "mode-selector" as configured in the backend		
-		$this->mode_selector=intval($this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'mode_selector'));	
+		// get the flexform "mode-selector" as configured in the backend
+		$this->mode_selector=intval($this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'mode_selector'));
 
 		// get the uid of the target page (->redirect), if not set, use the current page
-		$this->target_id=intval($this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'target_id')) ? intval($this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'target_id')) : $GLOBALS['TSFE']->id;  
+		$this->target_id=intval($this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'target_id')) ? intval($this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'target_id')) : $GLOBALS['TSFE']->id;
 
 		// get the "no search results" text
-		$this->no_results_text=$this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'no_results_text') ? $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'no_results_text') : 'No results.';  
+		$this->no_results_text=$this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'no_results_text') ? $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'no_results_text') : 'No results.';
 
 		// check, if the static template is included. If not, stop and display an error message
-		if (!is_array($this->conf['smalladForm.']['dataArray.'])) { 
+		if (!is_array($this->conf['smalladForm.']['dataArray.'])) {
 			return $this->pi_wrapInBaseClass('<div style="border:1px solid red; background:yellow; padding:1em;">'.
 					$this->pi_getLL('no_static_template').
 					'</div>');
 		}
 
-		// if the dropdown-mode-selector is beeing used: 
+		// if the dropdown-mode-selector is beeing used:
 		// check, if the first category has changed. If yes, clear the second
 		// mode selector.
 		// check, if the second category has changed. If yes, clear the third
@@ -107,7 +107,7 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 			$this->piVars['modeselector_cat_old'] = $this->piVars['modeselector_cat'];
 			$this->piVars['modeselector_cat2_old'] = $this->piVars['modeselector_cat2'];
 		}
-		
+
 		switch($this->mode_selector)	{
 			case 1:
 				// show the form for new smallds or process a submitted form
@@ -128,7 +128,7 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 				// Let FE users edit/delete their own ads
 				if ($this->postVars['edittype']=='update') {
 					$content .= $this->pi_wrapInBaseClass($this->processFormforNewAd());
-				} 
+				}
 				if (isset($this->piVars['deleteuid'])) {
 					$content .= $this->pi_wrapInBaseClass($this->deleteAd($this->piVars['deleteuid']));
 				}
@@ -146,7 +146,7 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 
 		return $content;
 	}/*}}}*/
-	
+
 	function processFormforNewAd() {/*{{{*/
 		$content.='';
 
@@ -170,7 +170,7 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 			$updateRecord = $this->pi_getRecord($this->table,$this->postVars['uid']);
 			if (!$GLOBALS['TSFE']->fe_user->user['uid'] == $updateRecord['fe_user_uid']) unset($updateRecord);
 			if (!is_array($updateRecord)) return '<div class="error_not_allowed">'.$this->pi_getLL('no_allowed_to_update').'</div>';
-		} 
+		}
 
 		// Insert the new Ad into the DB / Update the ad
 		// store the category as cleartext, so it can be used in the backend, too
@@ -182,14 +182,14 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 		$insertFields['email']			= strip_tags($this->postVars['email']);
 		$insertFields['displayemail']	= intval($this->postVars['displayemail']);
 		$insertFields['title']			= strip_tags($this->postVars['title']);
-		$insertFields['reviewed']		= intval($this->conf['markNewAdsAsReviewed']);	
-		$insertFields['iscommercial']	= intval($this->conf['markNewSmalladsAsCommercial']);	
+		$insertFields['reviewed']		= intval($this->conf['markNewAdsAsReviewed']);
+		$insertFields['iscommercial']	= intval($this->conf['markNewSmalladsAsCommercial']);
 
 		// hide this ad from the beginning on?
 		if (!is_array($updateRecord)) {
-			$insertFields['hidden']		= intval($this->conf['hideNewAds']);	
+			$insertFields['hidden']		= intval($this->conf['hideNewAds']);
 		} else {
-			$insertFields['hidden']		= intval($this->conf['hideUpdatedAds']);	
+			$insertFields['hidden']		= intval($this->conf['hideUpdatedAds']);
 		}
 
 		// set duration -> set endtime
@@ -208,15 +208,15 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 
 		// if a frontend user is logged in, create the db relation
 		if ($GLOBALS['TSFE']->fe_user->user) {
-			$insertFields['fe_user_uid'] = $GLOBALS['TSFE']->fe_user->user['uid']; 
+			$insertFields['fe_user_uid'] = $GLOBALS['TSFE']->fe_user->user['uid'];
 		}
-		
+
 		// Handle File Upload
-		if ($_FILES[$this->filevar]['name']) { 
+		if ($_FILES[$this->filevar]['name']) {
 			$upload=$this->handleUpload();
 			if ($upload[0]) {
 				// success
-				$insertFields['image']=basename($upload[1]);	
+				$insertFields['image']=basename($upload[1]);
 
 				// delete the old image, if one exists
 				if (is_array($updateRecord) && !empty($updateRecord['image'])) {
@@ -267,7 +267,7 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 				t3lib_div::plainMailEncoded($emaildata['toEmail'],
 						$emaildata['subject'],
 						sprintf($emaildata['body'],$GLOBALS['TSFE']->page['title'].', '.$insertFields['cat']."\n",html_entity_decode($insertFields['title'])."\n",html_entity_decode($insertFields['content'])."\n".$fe_userinfo),
-						'From: '.$emaildata['fromName'].' <'.$emaildata['fromEmail'].'>'											
+						'From: '.$emaildata['fromName'].' <'.$emaildata['fromEmail'].'>'
 						);
 				unset($emaildata);
 			}
@@ -284,7 +284,7 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 				t3lib_div::plainMailEncoded($insertFields['email'],
 						$emaildata['subject'],
 						sprintf($emaildata['body'],$GLOBALS['TSFE']->page['title'].', '.$insertFields['cat']."\n",html_entity_decode($insertFields['title'])."\n",html_entity_decode($insertFields['content'])."\n"),
-						'From: '.$emaildata['fromName'].' <'.$emaildata['fromEmail'].'>'											
+						'From: '.$emaildata['fromName'].' <'.$emaildata['fromEmail'].'>'
 						);
 			}
 
@@ -293,7 +293,7 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 			} else {
 				$content .= $lcObj->TEXT($this->conf['newadUpdated.']);
 			}
-			
+
 			unset($insertFields);
 
 		} else {
@@ -316,7 +316,7 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 		// Dest. filename
 		$filefuncs = new t3lib_basicFileFunctions();
 		$uploadfile = $filefuncs->getUniqueName($filefuncs->cleanFileName($_FILES[$this->filevar]['name']), $this->uploadFolder);
-		
+
 		if($this->fileTooBig($_FILES[$this->filevar]['size'])){
 			$content.='<p>'.$this->pi_getLL('fileupload.error.toobig').'</p>';
 			$success=false;
@@ -326,12 +326,12 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 			$content.='<p>'.$this->pi_getLL('fileupload.error.mimenotallowed').$_FILES[$this->filevar]['type'].'</p>';
 			$success=false;
 		}
-		
+
 		if(!$this->extAllowed($_FILES[$this->filevar]['name'])){ //extension allowed?
 			$content.='<p>'.$this->pi_getLL('fileupload.error.extensionnotallowed').'</p>';
 			$success=false;
 		}
-		
+
 		if($success && move_uploaded_file($_FILES[$this->filevar]['tmp_name'], $uploadfile)) {//succes!
 			$content='<p>'.$this->pi_getLL('fileupload.uploadsuccesfull').'</p>';
 			if ($this->conf['uploadChmod']) {
@@ -349,7 +349,7 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 	function handleError($error) {/*{{{*/
 		$content='';
 		switch ($error){
-			case 0: 
+			case 0:
 					break;
 			case 1:
 			case 2:
@@ -380,17 +380,17 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 		$excludelist = explode(",",$this->conf['extExclude']) 	;	//overrides includelist
 		$extension='';
 		if($extension=strstr($filename,'.')){
-			$extension=strtolower(substr($extension, 1));    
+			$extension=strtolower(substr($extension, 1));
 			return ((in_array($extension,$includelist) || in_array('*',$includelist)) && (!in_array($extension,$excludelist)));
 		} else {
 			return FALSE;
 		}
 	}/*}}}*/
-	
+
 	function fileTooBig($filesize) {/*{{{*/
 		return $filesize > $this->conf['maxsize'];
 	}/*}}}*/
-		
+
 	function deleteAd($deleteuid) {/*{{{*/
 		$content = '';
 
@@ -402,7 +402,7 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 
 		// does this record exist?
 		if (is_array($record)) {
-			
+
 			// Check, if the requested smallad belongs to this user
 			if ($GLOBALS['TSFE']->fe_user->user['uid'] != $record['fe_user_uid']) return '<div class="error_not_allowed">'.$this->pi_getLL('not_your_smallad_delete').'</div>';
 
@@ -412,18 +412,18 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 			if ($result) {
 				$content .= '<div class="success">'.$this->pi_getLL('success_delete').'</div>';
 			}
-			
+
 			// delete the image, if one exists
 			if (is_array($record) && !empty($record['image'])) {
 				@unlink($this->uploadFolder.$record['image']);
 			}
-		} 
+		}
 
 		return $content;
 	}/*}}}*/
 
 	/**
-	 * listOwnAds 
+	 * listOwnAds
 	 * Lists the ads of a logged in FE user and provides the possibility to
 	 * edit/delete them.
 	 *
@@ -432,7 +432,7 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 	 */
 	function listOwnAds() {/*{{{*/
 		$content = '';
-		
+
 		// check, if a user is logged in
 		if ($GLOBALS['TSFE']->fe_user->user) {
 			if ($this->piVars['edituid']) {
@@ -465,7 +465,7 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 
 		// Don't allow editing for non-logged-in users
 		if (!$GLOBALS['TSFE']->fe_user && $edituid) return '<div class="error_not_allowed">'.$this->pi_getLL('no_user_logged_in').'</div>';
-		
+
 		// if a smallad is going to be edited, fill in all the necessary fields
 		if ($edituid) {
 			// used DB-fields:
@@ -524,7 +524,7 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 					$userFieldNo++;
 				}
 			}
-			
+
 			// display the image
 			if ($record['image']) {
 				$lcObj=t3lib_div::makeInstance('tslib_cObj');
@@ -534,16 +534,16 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 				unset($lcObj);
 				$content .= '<div'.$this->pi_classParam('edit_image_note').'>'.$this->pi_getLL('edit_image_note').'</div>';
 			}
-			
+
 		} else {
 			// check, if a user is authenticated, if yes, preset some values
-			// if you want' only authenticated users to be allowed to create smallads, 
+			// if you want' only authenticated users to be allowed to create smallads,
 			// just set the permission restrictions to the plugin content object in the backend
 			if ($GLOBALS['TSFE']->fe_user->user) {
 				// set phone
-				$lConf['dataArray.']['30.']['value'] = $GLOBALS['TSFE']->fe_user->user['telephone']; 
+				$lConf['dataArray.']['30.']['value'] = $GLOBALS['TSFE']->fe_user->user['telephone'];
 				// set email
-				$lConf['dataArray.']['40.']['value'] = $GLOBALS['TSFE']->fe_user->user['email']; 
+				$lConf['dataArray.']['40.']['value'] = $GLOBALS['TSFE']->fe_user->user['email'];
 			}
 		}
 
@@ -551,20 +551,47 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 		$lConf['redirect']=$this->target_id;
 
 		// render the form
-		$content .= $this->cObj->FORM($lConf); 
+		$formContent .= $this->cObj->FORM($lConf);
 
-		// add some Javascript for the dynamic third category
+		// if defined in typoscript, check for maximum characters
+		// in the content field (using javascript)
+		if ($this->conf['ContentMaxChars'] && $this->conf['checkCharactersLeftWhileTyping']) {
+			$GLOBALS['TSFE']->additionalHeaderData[$this->prefixId . '_js0'] = '<script type="text/javascript">'
+. 'function checkContentLength() {
+	maxChars = ' . $this->conf['ContentMaxChars'] . '
+	if (document.'. $this->formName . '.content.value.length > maxChars) {
+		document.'. $this->formName . '.content.value = document.'. $this->formName . '.content.value.substring(0, maxChars);
+	} else {
+		document.all.kesmallads_maxchars.innerHTML = "' .
+		$this->pi_getLL('maxchars_begin') .
+		'" + (maxChars - document.'. $this->formName . '.content.value.length) + "' .
+		$this->pi_getLL('maxchars_end') . '";
+	}
+}'
+			. '</script>';
+
+			//$formContent = str_replace('textarea name="content"', 'textarea name="content" onKeyUp="checkContentLength();"', $formContent);
+			$formContent = str_replace('</textarea>', '</textarea><p id="kesmallads_maxchars"></p>', $formContent);
+			//debug($formContent);
+		}
+
+		// form content to the main content
+		$content .= $formContent;
+
+		// add some javascript to the header for the dynamic third category
 		$GLOBALS['TSFE']->additionalHeaderData[$this->prefixId . '_js1'] = $this->renderJavascriptFunctionsForDynamicForm();
+
+		// add inline javascript
 		$content .= $this->renderInlineJavascriptForDynamicForm();
 
 		return $content;
 	}/*}}}*/
 
 	/**
-	 * renderJavascriptFunctionsForDynamicForm 
+	 * renderJavascriptFunctionsForDynamicForm
 	 *
 	 * renders javascript functions for the page header
-	 * 
+	 *
 	 * @access public
 	 * @return string
 	 */
@@ -631,10 +658,10 @@ for (i=0; i<subCategoryList[selectedcat].length; i++) {
 	}/*}}}*/
 
 	/**
-	 * renderInlineJavascriptForDynamicForm 
+	 * renderInlineJavascriptForDynamicForm
 	 *
 	 * renders on page javascript
-	 * 
+	 *
 	 * @access public
 	 * @return void
 	 */
@@ -648,12 +675,20 @@ for (i=0; i<subCategoryList[selectedcat].length; i++) {
 		// add event-listener the select box
 		$content .= 'document.' . $this->formName . '.cat2.onchange = renderSubCat;' . "\n";
 
+		// add even-listener to content field
+		if ($this->conf['ContentMaxChars'] && $this->conf['checkCharactersLeftWhileTyping']) {
+			$content .= 'document.' . $this->formName . '.content.onkeyup = checkContentLength;' . "\n";
+
+			// call the function to initialize the note about how many characters are left
+			$content .= 'checkContentLength();' . "\n";
+		}
+
 		$content .= '/* ]]> */' . "\n";
 		$content .= '</script>' . "\n";
 
 		return $content;
 	}/*}}}*/
-	
+
 	/**
 	 * listViewTeaser shows the only a few titles of the newest smallads and a link to the smallads main page
 	 */
@@ -692,7 +727,7 @@ for (i=0; i<subCategoryList[selectedcat].length; i++) {
 		$this->conf['linktextTeaserShowAll.']['typolink.']['ATagParams']=$this->pi_classParam('teaser_link');
 		$this->conf['linktextTeaserShowAll.']['typolink.']['parameter']=$this->target_id;
 		$content.=$lcObj->TEXT($this->conf['linktextTeaserShowAll.']);
-	
+
 		// Returns the content from the plugin
 		return $content;
 	}/*}}}*/
@@ -710,7 +745,7 @@ for (i=0; i<subCategoryList[selectedcat].length; i++) {
 		if (!$GLOBALS['TSFE']->fe_user && $edit) return '<div class="error_not_allowed">'.$this->pi_getLL('no_user_logged_in').'</div>';
 
 		// Local settings for the listView function
-		$lConf=$this->conf['listView.'];	
+		$lConf=$this->conf['listView.'];
 
 		// make a local instance of tslib_cObj
 		$lcObj=t3lib_div::makeInstance('tslib_cObj');
@@ -720,7 +755,7 @@ for (i=0; i<subCategoryList[selectedcat].length; i++) {
 		$this->conf['noImageAvailable']=$this->conf['noImageAvailable'] ? $this->conf['noImageAvailable'] : $this->siteRelPath.'images/noImageAvailable.gif';
 
 		// Initializing the mode and page-pointer
-		if (!isset($this->piVars['pointer'])) $this->piVars['pointer']=0; 
+		if (!isset($this->piVars['pointer'])) $this->piVars['pointer']=0;
 		if (!isset($this->piVars['mode'])) {
 			if ($lConf['mode']) {
 				$this->piVars['mode']=$lConf['mode'];
@@ -740,23 +775,23 @@ for (i=0; i<subCategoryList[selectedcat].length; i++) {
 				$i++;
 				$items[strval($i)]=$this->getCategoryName($cat['value'], $this->conf['smalladForm.']['dataArray.']['10.']['valueArray.']);
 			}
-		} 
+		}
 
 		// Add some WHERE conditons to the database query ...
-		$db_whereClause = ''; 
-		
+		$db_whereClause = '';
+
 		// Filter the elements according to the mode selector.
 		// Transform integer value of the mode to the cleartext category value
 		// stored in the database. o also could have stored the mode value, but
 		// with the category value, the editor has a cleartext which he can
 		// read in the backend
 		if ($this->conf['modeSelectorType'] == 'buttons') {
-			$i=0; 
+			$i=0;
 			foreach ($this->conf['smalladForm.']['dataArray.']['10.']['valueArray.'] as $cat) {
-				$i++; 
+				$i++;
 				if ($this->piVars['mode']==$i) {
-					$db_whereClause=' AND cat LIKE "%'.$this->getCategoryName($cat['value'], $this->conf['smalladForm.']['dataArray.']['10.']['valueArray.']).'%"'; 
-				} 
+					$db_whereClause=' AND cat LIKE "%'.$this->getCategoryName($cat['value'], $this->conf['smalladForm.']['dataArray.']['10.']['valueArray.']).'%"';
+				}
 			}
 		} else {
 			$db_whereClause .= $this->dropdownModeSelectorFilter();
@@ -780,8 +815,8 @@ for (i=0; i<subCategoryList[selectedcat].length; i++) {
 		list($this->internal['res_count'])=$GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
 		// Put the whole list together
-		$fullTable='';	
-		
+		$fullTable='';
+
 		// Make listing query, pass query to SQL database:
 		$res = $this->pi_exec_query($this->table,0,$db_whereClause);
 		$this->internal['currentTable'] = $this->table;
@@ -792,9 +827,9 @@ for (i=0; i<subCategoryList[selectedcat].length; i++) {
 		// Adds the mode selector (= categories)
 		if (!$edit && $this->conf['showModeSelector'] && !$this->searchmode) {
 			if ($this->conf['modeSelectorType'] == 'buttons') {
-				$fullTable .= $this->pi_list_modeSelector($items); 
+				$fullTable .= $this->pi_list_modeSelector($items);
 			} else {
-				$fullTable .= $this->renderDropdownModeSelector($res); 
+				$fullTable .= $this->renderDropdownModeSelector($res);
 			}
 		}
 
@@ -821,15 +856,15 @@ for (i=0; i<subCategoryList[selectedcat].length; i++) {
 		}
 
 		// Returns the content from the plugin.
-		return $fullTable; 
+		return $fullTable;
 	}/*}}}*/
 
 	/**
-	 * dropdownModeSelectorFilter 
+	 * dropdownModeSelectorFilter
 	 *
 	 * compiles the where clause used for filtering the elements selected by
 	 * the dropdown mode selector.
-	 * 
+	 *
 	 * @param string $modes
 	 * @access public
 	 * @return string
@@ -843,15 +878,15 @@ for (i=0; i<subCategoryList[selectedcat].length; i++) {
 		);
 		foreach ($modes as $modeSelector => $dbFieldName) {
 			if (($queryForMode == 'all' || $queryForMode == $modeSelector) && $this->piVars[$modeSelector] && $this->piVars[$modeSelector] != $this->pi_getLL('list_mode_1')) {
-				$db_whereClause .= ' AND ' . $dbFieldName . ' LIKE "%' . $this->sanitizeData($this->piVars[$modeSelector]) . '%"'; 
+				$db_whereClause .= ' AND ' . $dbFieldName . ' LIKE "%' . $this->sanitizeData($this->piVars[$modeSelector]) . '%"';
 			}
 		}
 		return $db_whereClause;
 	}/*}}}*/
 
 	/**
-	 * renderSearchBox 
-	 * 
+	 * renderSearchBox
+	 *
 	 * @access public
 	 * @return string
 	 */
@@ -863,11 +898,11 @@ for (i=0; i<subCategoryList[selectedcat].length; i++) {
 	}/*}}}*/
 
 	/**
-	 * renderDropdownModeSelector 
+	 * renderDropdownModeSelector
 	 *
 	 * Renders a mode selector with all three categoy-types, the third category depends
 	 * on the second one and changes dynamically.
-	 * 
+	 *
 	 * @access public
 	 * @return string
 	 */
@@ -952,7 +987,7 @@ for (i=0; i<subCategoryList[selectedcat].length; i++) {
 	 * This one comes from tslib_pibase, I implemented it here, because I
 	 * don't want to have any table-Tags in my list view, which are normaly
 	 * rendered from pi_mlist_makelist.
-	 * 
+	 *
 	 * Returns the list of items based on the input SQL result pointer
 	 * For each result row the internal var, $this->internal['currentRow'], is set with the row returned.
 	 * $this->pi_list_header() makes the header row for the list
@@ -990,7 +1025,7 @@ for (i=0; i<subCategoryList[selectedcat].length; i++) {
 		$editPanel=$this->pi_getEditPanel();
 		if (!$this->searchmode) {
 			$deleteLinkURL = $this->pi_linkTP_keepPIvars_url(array('deleteuid'=>$this->getFieldContent('uid')));
-			$deleteConfirmJS = 'if (confirm("'.$this->pi_getLL('really_delete','Really delete?').'")) window.location.href = "'.$deleteLinkURL.'";'; 
+			$deleteConfirmJS = 'if (confirm("'.$this->pi_getLL('really_delete','Really delete?').'")) window.location.href = "'.$deleteLinkURL.'";';
 			// show standard list / long search results list
 			return 	'<div'.($c%2 ? $this->pi_classParam('listrow-odd') : $this->pi_classParam('listrow')).'>'
 						.'<div'.$this->pi_classParam('image').'>'.$this->getFieldContent('image').'</div>'
@@ -1023,7 +1058,7 @@ for (i=0; i<subCategoryList[selectedcat].length; i++) {
 	}/*}}}*/
 
 	/**
-	 * Renders the DB-Content into correct output 
+	 * Renders the DB-Content into correct output
 	 *	$fn: name of the db column
 	 */
 	function getFieldContent($fN) {/*{{{*/
@@ -1057,16 +1092,16 @@ for (i=0; i<subCategoryList[selectedcat].length; i++) {
 	}/*}}}*/
 
 	/**
-	 * getCategoryName 
+	 * getCategoryName
 	 *
 	 * returns the cleartext value of a category key
 	 * $catkey: Key of a category like stored in the Typoscript Setup
 	 * cat values and labels are found in
 	 * smalladForm.dataArray.10.valueArray.
 	 * check which TS-Index this "cat"-key has and return the matching label
-	 * 
-	 * @param mixed $string 
-	 * @param array $valueArray 
+	 *
+	 * @param mixed $string
+	 * @param array $valueArray
 	 * @access public
 	 * @return void
 	 */
@@ -1098,7 +1133,7 @@ for (i=0; i<subCategoryList[selectedcat].length; i++) {
 	function getValueArrayFromLL($lConf,$dataArrayRow,$locallang_index) {/*{{{*/
 		unset ($lConf['dataArray.'][$dataArrayRow]['valueArray.']);
 		$i=0;
-		while ($this->pi_getLL($locallang_index.$i,'')) {	
+		while ($this->pi_getLL($locallang_index.$i,'')) {
 			$index=strval(($i+1)*10).'.';
 			$lConf['dataArray.'][$dataArrayRow]['valueArray.'][$index]['label']=$this->pi_getLL($locallang_index.$i,'');
 			$lConf['dataArray.'][$dataArrayRow]['valueArray.'][$index]['value']=$i;
@@ -1119,7 +1154,7 @@ for (i=0; i<subCategoryList[selectedcat].length; i++) {
 	public function sanitizeData($data='') {/*{{{*/
 		return htmlspecialchars($data, ENT_QUOTES, $GLOBALS['TSFE']->renderCharset);
 	}/*}}}*/
-	
+
 }
 
 

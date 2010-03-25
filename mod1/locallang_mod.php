@@ -15,7 +15,7 @@ $LOCAL_LANG = Array (
 	),
 	'de' => Array (
 		'mlang_tabs_tab' => 'Kleinanzeigen',
-		'mlang_labels_tabdescr' => 'Hier können Sie alle neuen Kleinanzeigen auf einmal freigeben und Kleinanzeigen exportieren.',
+		'mlang_labels_tabdescr' => 'Hier kÃ¶nnen Sie alle neuen Kleinanzeigen auf einmal freigeben und Kleinanzeigen exportieren.',
 		'mlang_labels_tablabel' => 'Kleinanzeigen verwalten',
 	),
 	'no' => Array (
@@ -42,8 +42,8 @@ $LOCAL_LANG = Array (
 	),
 	'fi' => Array (
 		'mlang_tabs_tab' => 'Pienilmitukset',
-		'mlang_labels_tabdescr' => 'Voit tämän modulin avulla piilottaa kaikki uudet pienilmoitukset tai viedä ne tiedostoksi.',
-		'mlang_labels_tablabel' => 'Pienilmoitusten hallinta',	
+		'mlang_labels_tabdescr' => 'Voit tÃ¤mÃ¤n modulin avulla piilottaa kaikki uudet pienilmoitukset tai viedÃ¤ ne tiedostoksi.',
+		'mlang_labels_tablabel' => 'Pienilmoitusten hallinta',
 	),
 	'tr' => Array (
 	),

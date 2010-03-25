@@ -1,5 +1,5 @@
 plugin.tx_kesmallads_pi1 {
-	
+
 	# Set the commercial Flag in every new smallad?
 	markNewSmalladsAsCommercial = 0
 
@@ -13,7 +13,7 @@ plugin.tx_kesmallads_pi1 {
 	listOrder = crdate
 
 	# Descending Flag, set if you want the order to be descending instead of ascending
-	listOrderDescFlag = 1	
+	listOrderDescFlag = 1
 
 	listView {
 		# Results per page
@@ -27,7 +27,7 @@ plugin.tx_kesmallads_pi1 {
 		# How many Teasers? (was in earlier versions "teaserNum")
 		results_at_a_time = 3
 	}
-	
+
 	# Notify the Editor of new smallads?
 	notifyEmailEditor = 0
 	notifyEmailEditor {
@@ -37,7 +37,7 @@ plugin.tx_kesmallads_pi1 {
 		fromName = Smallads Extension
 		fromEmail =
 	}
-	
+
 	# Notify the Editor of updated smallads?
 	notifyEmailEditorOnUpdate = 0
 	notifyEmailEditorOnUpdate {
@@ -56,7 +56,7 @@ plugin.tx_kesmallads_pi1 {
 		fromName = Smallads
 		fromEmail =
 	}
-	
+
 	# Send an Email to the smallad submitter when he has updated an ad?
 	notifyEmailUserOnUpdate = 0
 	notifyEmailUserOnUpdate {
@@ -65,20 +65,20 @@ plugin.tx_kesmallads_pi1 {
 		fromName = Smallads
 		fromEmail =
 	}
-	
+
 	# Linktext for the teaser function of the plugin (TEXT Content Element)
 	linktextTeaserShowAll.value = Show all smallads
 	linktextTeaserShowAll.lang.de = Alle Kleinanzeigen zeigen
 	linktextTeaserShowAll.lang.fr = Afficher toutes les annonces
 	linktextTeaserShowAll.lang.nl = Alle advertenties tonen
-	linktextTeaserShowAll.lang.fi = N‰yt‰ kaikki pikkumainokset
+	linktextTeaserShowAll.lang.fi = N√§yt√§ kaikki pikkumainokset
 
 	# output text when a new smallad was created (TEXT Content Element)
 	newadCreated.value = A new smallad has been created.
 	newadCreated.lang.de = Eine neue Kleinanzeige wurde angelegt.
-	newadCreated.lang.fr = Une nouvelle annonce a ÈtÈ crÈÈe.	
+	newadCreated.lang.fr = Une nouvelle annonce a √©t√© cr√©√©e.
 	newadCreated.lang.nl = Een nieuwe advertentie is aangemaakt.
-	newadCreated.lang.fi = Uusi pienmainos on luotu.	
+	newadCreated.lang.fi = Uusi pienmainos on luotu.
 
 	# output text when a smallad was updated (TEXT Content Element)
 	newadUpdated.value = The smallad has been updated.
@@ -87,15 +87,19 @@ plugin.tx_kesmallads_pi1 {
 	# How many Chars are allowed for the content field? If set to zero, no check is done.
 	ContentMaxChars = 0
 
+	# if set to 1 a note below the content field informs the user about how
+	# how many chars he has left
+	checkCharactersLeftWhileTyping = 1
+
 	# How many Chars are allowed for the content + title field? If set to zero, no check is done.
 	ContentAndTitleMaxChars = 0
 
 	# Output text when there are too many chars in the content-field (TEXT Content Element)
 	ContentTooManyCharsMessage.value = Your smallad is too long.
-	ContentTooManyCharsMessage.lang.de = Der Text Ihrer Kleinanzeige ist zu lang. Bitte gehen Sie zur¸ck und k¸rzen Sie sie.
+	ContentTooManyCharsMessage.lang.de = Der Text Ihrer Kleinanzeige ist zu lang. Bitte gehen Sie zur√ºck und k√ºrzen Sie sie.
 	ContentTooManyCharsMessage.lang.fr = Le texte de votre annonce est trop long. Veuillez le racourcir svp.
 	ContentTooManyCharsMessage.lang.nl = Uw advertentie tekst is te lang.
-	ContentTooManyCharsMessage.lang.fi = Mainoksesi on liian pitk‰, ole hyv‰ ja lyhenn‰ sit‰.
+	ContentTooManyCharsMessage.lang.fi = Mainoksesi on liian pitk√§, ole hyv√§ ja lyhenn√§ sit√§.
 
 	# Should a new ad be hidden at first? Then you have to unhide them manually...
 	hideNewAds = 1
@@ -110,7 +114,7 @@ plugin.tx_kesmallads_pi1 {
 	showModeSelector = 1
 
 	# Which mode selector do we want to be shown?
-	# Possible values are: 
+	# Possible values are:
 	# buttons (This is the default style mode selector.)
 	# dropdown (This is the more advanced mode selector which also shows the second category and the subcateogories.)
 	modeSelectorType = dropdown
@@ -125,10 +129,9 @@ plugin.tx_kesmallads_pi1 {
 	maxsize = 100000
 
 	# path to a "no image available"-image
-	noImageAvailable = 
-	
-	# Here the form for the Smallads is configured
+	noImageAvailable =
 
+	# Here the form for the Smallads is configured
 	smalladForm {
 		accessibility = 1
 		layout = <div class="smalladform-label">###LABEL###</div><div class="smalladform-field">###FIELD###</div>
@@ -136,17 +139,17 @@ plugin.tx_kesmallads_pi1 {
 		LABEL.layout = <div class="smalladform-field-label">###FIELD###</div>
 		badMess = Please fill in these fields:
 		params = class="inputclass"
-		params.check = 
+		params.check =
 		params.submit = class="submitclass"
 		params.textarea = class="inputclass"
 		REQ = 1
 		REQ.labelWrap.wrap = <span class="smalladform-label-req">|</span>
 
-		
+
 		# If you want to us the old table layout (maybe because you have a
 		# working site with css and you don't want to change it), uncomment
 		# these lines:
-		
+
 		#stdWrap.wrap = <table border="0" cellspacing="1" cellpadding="1" class="csc-mailform"> | </table>
 		#layout = <tr><td class="csc-form-labelcell" valign="top">###LABEL###</td><td class="csc-form-fieldcell">###FIELD###</td></tr>
 		#CHECK.layout = <tr><td class="csc-form-fieldcell" align="right" valign="top">###FIELD###</td><td class="csc-form-labelcell-check" valign="top">###LABEL###</td></tr>
@@ -161,7 +164,7 @@ plugin.tx_kesmallads_pi1 {
 			10 {
 				label = Category
 				label.lang.de = Rubrik
-				label.lang.fr = CatÈgorie
+				label.lang.fr = Cat√©gorie
 				label.lang.nl = Rubriek
 				label.lang.fi = Kategoria
 				type = cat=select
@@ -171,7 +174,7 @@ plugin.tx_kesmallads_pi1 {
 					10.label.lang.de = Verkaufe
 					10.label.lang.fr = A vendre
 					10.label.lang.nl = Aangeboden
-					10.label.lang.fi = Myyd‰‰n
+					10.label.lang.fi = Myyd√§√§n
 					10.value = For Sale
 					20.label = Wanted
 					20.label.lang.de = Suche
@@ -190,14 +193,14 @@ plugin.tx_kesmallads_pi1 {
 
 
 			# Since Version 1.1.0: Second and third category (third
-			# category is a subcategory of the second).			
+			# category is a subcategory of the second).
 			# If you don't want to use them, write this into your TS-Setup:
 			# plugin.tx_kesmallads_pi1.smalladForm.dataArray.12 >
 			# plugin.tx_kesmallads_pi1.smalladForm.dataArray.14 >
 			12 {
 				label = Category
 				label.lang.de = Rubrik
-				label.lang.fr = CatÈgorie
+				label.lang.fr = Cat√©gorie
 				label.lang.nl = Rubriek
 				label.lang.fi = Kategoria
 				type = cat2=select
@@ -207,7 +210,7 @@ plugin.tx_kesmallads_pi1 {
 					10.label.lang.de = Bananen
 					10.value = bananas
 					20.label = Apples
-					20.label.lang.de = ƒpfel
+					20.label.lang.de = √Ñpfel
 					20.value = apples
 					30.label = Strawberries
 					30.label.lang.de = Erdbeeren
@@ -218,7 +221,7 @@ plugin.tx_kesmallads_pi1 {
 			14 {
 				label = Subcategory
 				label.lang.de = Unterrubrik
-				label.lang.fr = CatÈgorie
+				label.lang.fr = Cat√©gorie
 				label.lang.nl = Rubriek
 				label.lang.fi = Kategoria
 				type = cat3=select
@@ -226,18 +229,18 @@ plugin.tx_kesmallads_pi1 {
 				valueArray {
 					10.label = No selection
 					10.label.lang.de = Keine Auswahl
-					10.value = No selection				
+					10.value = No selection
 				}
 			}
 
 			20.label = Title
-			20.label.lang.de = ‹berschrift
+			20.label.lang.de = √úberschrift
 			20.label.lang.fr = Titre
 			20.label.lang.nl = Titel
 			20.label.lang.fi = Otsikko
 			20.type = title=input,35
 			20.required = 1
-			
+
 			25.label = Content
 			25.label.lang.de = Anzeigentext
 			25.label.lang.fr = Description
@@ -245,17 +248,17 @@ plugin.tx_kesmallads_pi1 {
 			25.label.lang.fi = Kuvaus
 			25.type = content=textarea,30,5
 			25.required = 1
-			
+
 			28.label = Image
 			28.label.lang.de = Bild
 			28.label.lang.fr = Image
 			28.label.lang.nl = Afbeelding
 			28.label.lang.fi = Kuva
 			28.type = file
-			
+
 			30.label = Phone
 			30.label.lang.de = Telefon
-			30.label.lang.fr = TÈlÈphone
+			30.label.lang.fr = T√©l√©phone
 			30.label.lang.nl = Telefoon
 			30.label.lang.fi = Puhelinnumero
 			30.type = phone=input,35
@@ -269,12 +272,12 @@ plugin.tx_kesmallads_pi1 {
 			40.type = email=input,35
 			40.required = 1
 			40.specialEval = EMAIL
-			
+
 			50.label = Should the email address be displayed?<br />If you don't check this field, your email address will only be stored internally.<br />Your phone number will be shown automatically.
-			50.label.lang.de = Soll Ihre Email-Adresse auf unserer Internetseite angezeigt werden?<br />Wenn Sie dieses Feld nicht ausw‰hlen, wird Ihre Email-Adresse nur intern gespeichert.<br />Ihre Telefonnummer wird automatisch angezeigt.
-			50.label.lang.fr = Voulez-vous afficher votre adresse e-mail?<br />Si vous ne cochez pas cette case, votre adresse e-mail ne sera pas affichÈe mais seulement stockÈe.<br />Votre numÈro de tÈlÈphone est automatiquement affichÈ.
+			50.label.lang.de = Soll Ihre Email-Adresse auf unserer Internetseite angezeigt werden?<br />Wenn Sie dieses Feld nicht ausw√§hlen, wird Ihre Email-Adresse nur intern gespeichert.<br />Ihre Telefonnummer wird automatisch angezeigt.
+			50.label.lang.fr = Voulez-vous afficher votre adresse e-mail?<br />Si vous ne cochez pas cette case, votre adresse e-mail ne sera pas affich√©e mais seulement stock√©e.<br />Votre num√©ro de t√©l√©phone est automatiquement affich√©.
 			50.label.lang.nl = Moet het email adres getoond worden?<br />Indien niet aangevinkt, wordt je email adres alleen intern opgeslagen.<br />Je telefoonnummer wordt automatisch getoond.
-			50.label.lang.fi = N‰ytet‰‰nkˆ s‰hkˆpostiosoite?.<br />Jos et ruksaa t‰t‰ kohtaa, s‰hkˆpostiosoitteesi tallennetaan sis‰isesti.<br />Puhelinnumerosi n‰ytet‰‰n automaattisesti.
+			50.label.lang.fi = N√§ytet√§√§nk√∂ s√§hk√∂postiosoite?.<br />Jos et ruksaa t√§t√§ kohtaa, s√§hk√∂postiosoitteesi tallennetaan sis√§isesti.<br />Puhelinnumerosi n√§ytet√§√§n automaattisesti.
 			50.type = displayemail=check
 			50.value = 1
 
@@ -285,15 +288,15 @@ plugin.tx_kesmallads_pi1 {
 			# Delete the duration fields
 			# plugin.tx_kesmallads_pi1.smalladForm.dataArray.60 >
 			# plugin.tx_kesmallads_pi1.smalladForm.dataArray.61 >
-			
+
 			60.type = label
-			60.value = How long do you want to stay your ad online? 
+			60.value = How long do you want to stay your ad online?
 			60.value.lang.de = Wie lange soll die Anzeige online bleiben?
 
 			61 {
 				label = Duration
 				label.lang.de = Dauer
-				label.lang.fr = DurÈe
+				label.lang.fr = Dur√©e
 				type = duration=select
 				required = 1
 				valueArray {
@@ -317,7 +320,7 @@ plugin.tx_kesmallads_pi1 {
 			90.value.lang.de = Abschicken
 			90.value.lang.fr = Envoyer
 			90.value.lang.nl = Versturen
-			90.value.lang.fi = L‰het‰
+			90.value.lang.fi = L√§het√§
 		}
 	}
 
@@ -325,30 +328,30 @@ plugin.tx_kesmallads_pi1 {
 	cat3 {
 		1 = TEXT
 		1.value = Green Apples
-		1.lang.de = Gr¸ne ƒpfel
+		1.lang.de = Gr√ºne √Ñpfel
 		1.belongsTo = apples
 
 		2 = TEXT
 		2.value = Red Apples
-		2.lang.de = Rote ƒpfel
+		2.lang.de = Rote √Ñpfel
 		2.belongsTo = apples
 
 		3 = TEXT
 		3.value = Small Bananas
 		3.lang.de = Kleine Bananen
 		3.belongsTo = bananas
-		
+
 		4 = TEXT
 		4.value = Big Bananas
-		4.lang.de = Groﬂe Bananen
+		4.lang.de = Gro√üe Bananen
 		4.belongsTo = bananas
-		
+
 		5 = TEXT
 		5.value = Strawberries
 		5.lang.de = Erdbeeren
 		5.belongsTo = strawberries
 	}
-		
+
 	smalladimage {
 		file.maxW = 100
 		imageLinkWrap = 1

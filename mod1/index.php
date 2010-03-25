@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2005 Christian Bülter (buelter@kennziffer.com)
+*  (c) 2005 Christian BÃ¼lter (buelter@kennziffer.com)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -24,10 +24,8 @@
 /**
  * Module 'Smallads' for the 'ke_smallads' extension.
  *
- * @author	Christian Bülter <buelter@kennziffer.com>
+ * @author	Christian BÃ¼lter <buelter@kennziffer.com>
  */
-
-
 
 	// DEFAULT initialization of a module [BEGIN]
 unset($MCONF);
@@ -52,7 +50,7 @@ class tx_kesmallads_module1 extends t3lib_SCbase {
 		global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
 
 		parent::init();
-		
+
 		/*
 		if (t3lib_div::_GP('clear_all_cache'))	{
 			$this->include_once[]=PATH_t3lib.'class.t3lib_tcemain.php';
@@ -67,12 +65,12 @@ class tx_kesmallads_module1 extends t3lib_SCbase {
 		global $LANG;
 		$this->MOD_MENU = Array (
 			'function' => Array (
-				'title' => $LANG->getLL('title'),	
-				'exportAll' => $LANG->getLL('exportAll'),	
-				'exportReviewed' => $LANG->getLL('exportReviewed'),	
-				'exportReviewedUserdata' => $LANG->getLL('exportReviewedUserdata'),	
+				'title' => $LANG->getLL('title'),
+				'exportAll' => $LANG->getLL('exportAll'),
+				'exportReviewed' => $LANG->getLL('exportReviewed'),
+				'exportReviewedUserdata' => $LANG->getLL('exportReviewedUserdata'),
 				'delete' => $LANG->getLL('delete'),
-				'unHideReviewed' => $LANG->getLL('unHideReviewed'),	
+				'unHideReviewed' => $LANG->getLL('unHideReviewed'),
 			)
 		);
 		parent::menuConfig();
@@ -93,7 +91,7 @@ class tx_kesmallads_module1 extends t3lib_SCbase {
         // get the page TSconfig
         $this->pageTSconfig=t3lib_BEfunc::GetPagesTSconfig($this->id);
         $this->modTSconfig=$this->pageTSconfig['ke_smallads.'];
-        
+
 		if (($this->id && $access) || ($BE_USER->user['admin'] && !$this->id))	{
 
 				// Draw the header.
@@ -127,18 +125,10 @@ class tx_kesmallads_module1 extends t3lib_SCbase {
 			$this->content.=$this->doc->spacer(5);
 			$this->content.=$this->doc->section('',$this->doc->funcMenu($headerSection,t3lib_BEfunc::getFuncMenu($this->id,'SET[function]',$this->MOD_SETTINGS['function'],$this->MOD_MENU['function'])));
 			$this->content.=$this->doc->divider(5);
-			
+
 			// Render content:
 			$this->moduleContent();
-			
-			// debug
-			/*
-			$this->content.='<br />GET:'.t3lib_div::view_array($_GET).'<BR>'
-							.'POST:'.t3lib_div::view_array($_POST).'<BR>'
-							.'id:'.$this->id.'<BR>'.
-							'';
-			*/ 
-			
+
 			// ShortCut
 			if ($BE_USER->mayMakeShortcut())	{
 				$this->content.=$this->doc->spacer(20).$this->doc->section('',$this->doc->makeShortcutIcon('id',implode(',',array_keys($this->MOD_MENU)),$this->MCONF['name']));
@@ -201,7 +191,7 @@ class tx_kesmallads_module1 extends t3lib_SCbase {
 					$exportcontent.='<b>'.$row['cat'].':</b> ';
 					if (!$this->modTSconfig['skipTitle']) $exportcontent.=$row['title'].'. ';
 					$exportcontent.=$row['content'];
-                    // if configured, replace all non number chars with a pre-defined char 
+                    // if configured, replace all non number chars with a pre-defined char
                     if ($this->modTSconfig['telephoneNumberDivider']) {
                         $row['phone']=ereg_replace('[^0-9| |^a-z|^A-Z]',$this->modTSconfig['telephoneNumberDivider'],$row['phone']);
                     }
@@ -245,7 +235,7 @@ class tx_kesmallads_module1 extends t3lib_SCbase {
 					$exportcontent.='<b>'.$row['cat'].':</b> ';
 					if (!$this->modTSconfig['skipTitle']) $exportcontent.=$row['title'].'. ';
 					$exportcontent.=$row['content'];
-                    // if configured, replace all non number chars with a pre-defined char 
+                    // if configured, replace all non number chars with a pre-defined char
                     if ($this->modTSconfig['telephoneNumberDivider']) {
                         $row['phone']=ereg_replace('[^0-9| |^a-z|^A-Z]',$this->modTSconfig['telephoneNumberDivider'],$row['phone']);
                     }
@@ -283,7 +273,7 @@ class tx_kesmallads_module1 extends t3lib_SCbase {
 					$exportcontent.='<b>'.$row['cat'].':</b> ';
 					if (!$this->modTSconfig['skipTitle']) $exportcontent.=$row['title'].'. ';
 					$exportcontent.=$row['content'];
-                    // if configured, replace all non number chars with a pre-defined char 
+                    // if configured, replace all non number chars with a pre-defined char
                     if ($this->modTSconfig['telephoneNumberDivider']) {
                         $row['phone']=ereg_replace('[^0-9| |^a-z|^A-Z]',$this->modTSconfig['telephoneNumberDivider'],$row['phone']);
                     }
@@ -316,9 +306,9 @@ class tx_kesmallads_module1 extends t3lib_SCbase {
 					$updateFields=array();
 					$updateFields['deleted']=1;
 					$res=$GLOBALS['TYPO3_DB']->exec_UPDATEquery($this->table,'pid='.$this->id.' AND hidden=0 AND deleted=0',$updateFields);
-					$content.='<p><b>'.$GLOBALS['TYPO3_DB']->sql_affected_rows().' Kleinanzeigen wurden gelöscht.</b></p>';
+					$content.='<p><b>'.$GLOBALS['TYPO3_DB']->sql_affected_rows().' Kleinanzeigen wurden gelÃ¶scht.</b></p>';
 				} else {
-					$content.='<a href="index.php?SET[function]=delete&CMD=doDelete&id='.$this->id.'" class="linkbutton">Kleinanzeigen jetzt löschen!</a>';
+					$content.='<a href="index.php?SET[function]=delete&CMD=doDelete&id='.$this->id.'" class="linkbutton">Kleinanzeigen jetzt lÃ¶schen!</a>';
 				}
 				$this->content.=$this->doc->section($LANG->getLL('delete_title'),$content,0,1);
 			break;

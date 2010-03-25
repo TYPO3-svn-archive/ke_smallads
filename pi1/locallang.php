@@ -24,7 +24,7 @@ $LOCAL_LANG = Array (
 		'tt_content.pi_kesmallads.mode.I.1' => 'Show form for a new smallad / process form',
 		'tt_content.pi_kesmallads.mode.I.2' => 'Show smallads teaser',
 		'tt_content.pi_kesmallads.mode.I.3' => 'Show short linked search results',
-		'tt_content.pi_kesmallads.mode.I.4' => 'Let FE Users edit/delete their smallads',
+		'tt_content.pi_kesmallads.mode.I.4' => 'Logged in users can edit/delete their smallads',
 		'tt_content.pi_kesmallads.target_id' => 'Target-ID (empty for current page)',
 		'tt_content.pi_kesmallads.no_results_text' => '"No search results" text',
 		'tx_kesmallads_smallads.phone' => 'phone',
@@ -41,6 +41,8 @@ $LOCAL_LANG = Array (
 		'edit_image_note' => 'If you want to keep this image, just leave the field "Image" empty.',
 		'no_allowed_to_update' => 'You are not allowed to update that smallad.',
 		'visible_until' => 'visible until: ',
+		'maxchars_begin' => 'You have ',
+		'maxchars_end' => ' characters left.',
 	),
 	'dk' => Array (
 		'back' => 'Tilbage',
@@ -67,7 +69,7 @@ $LOCAL_LANG = Array (
 		'tt_content.pi_kesmallads.mode.I.1' => 'Formular für neue Kleinanzeige / Formular verarbeiten',
 		'tt_content.pi_kesmallads.mode.I.2' => 'Kleinanzeigen-Anreißer anzeigen',
 		'tt_content.pi_kesmallads.mode.I.3' => 'Kurze verlinkte Suchergebnisse anzeigen',
-		'tt_content.pi_kesmallads.mode.I.4' => 'FE User können ihre Anzeigen ändern/löschen',
+		'tt_content.pi_kesmallads.mode.I.4' => 'Angemeldete Benutzer können eigene Anzeigen ändern/löschen',
 		'tt_content.pi_kesmallads.target_id' => 'ID der Zielseite (leer für diese Seite)',
 		'tt_content.pi_kesmallads.no_results_text' => 'Text für "Keine Suchergebnisse"',
 		'tx_kesmallads_smallads.phone' => 'Telefon',
@@ -84,7 +86,8 @@ $LOCAL_LANG = Array (
 		'edit_image_note' => 'Falls Sie dieses Bild beibehalten möchten, lassen Sie das Feld "Bild" einfach leer.',
 		'no_allowed_to_update' => 'Sie dürfen diese Kleinanzeige nicht aktualisieren.',
 		'visible_until' => 'Sichtbar bis: ',
-
+		'maxchars_begin' => 'Sie haben noch ',
+		'maxchars_end' => ' Zeichen übrig.',
 	),
 	'no' => Array (
 	),
@@ -150,7 +153,7 @@ $LOCAL_LANG = Array (
 	),
 	'si' => Array (
 	),
-	'fi' => Array (		
+	'fi' => Array (
 		'fileupload.error.nodir' => 'Kuvan viennissä tapahtui virhe: kuvan vientihakemistoa ei ole olemassa.',
 		'fileupload.error.toobig' => 'Kuvan viennissä tapahtui virhe: kuvan koko on liian iso.',
 		'fileupload.error.mimenotallowed' => 'Kuvan viennissä tapahtui virhe: tiedoston vienti ei ole sallittu.',
