@@ -193,7 +193,8 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 
 		// stop here if we have errors
 		if (count($errors)) {
-			return '<div class="error">' . implode('<br />', $errors) . '</div>';
+			return '<div class="error">' . implode('<br />', $errors) . '</div><br />' .
+			'<a href="javascript:history.back()">' . $this->pi_getLL('back') . '</a>';
 		}
 
 		// Insert the new Ad into the DB / Update the ad
@@ -303,7 +304,7 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 			if ($this->conf['notifyEmailUserOnUpdate'] && is_array($updateRecord)) {
 				$emaildata = $this->conf['notifyEmailUserOnUpdate.'];
 			}
-			if ($emaildata) {
+			if ($emaildata && !empty($insertFields['email'])) {
 				$emaildata['body']=str_replace("|","\n",$emaildata['body']);
 				t3lib_div::plainMailEncoded($insertFields['email'],
 						$emaildata['subject'],
