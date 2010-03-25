@@ -251,7 +251,7 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 		}
 
 		// Do the inserting / updating
-		$fieldList='cat,cat2,cat3,content,user,image,phone,email,displayemail,title,reviewed,hidden,fe_user_uid,endtime';
+		$fieldList='cat,cat2,cat3,content,user,image,phone,email,displayemail,title,reviewed,hidden,fe_user_uid,endtime,iscommercial';
 		if (!is_array($updateRecord)) {
 			$result = $this->cObj->DBgetInsert($this->table, $this->conf['pidList'] , $insertFields, $fieldList, 1);
 		} else {
