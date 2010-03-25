@@ -583,11 +583,11 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 		if ($this->conf['ContentMaxChars'] && $this->conf['checkCharactersLeftWhileTyping']) {
 			$GLOBALS['TSFE']->additionalHeaderData[$this->prefixId . '_js0'] = '<script type="text/javascript">'
 . 'function checkContentLength() {
-	maxChars = ' . $this->conf['ContentMaxChars'] . '
+	maxChars = ' . $this->conf['ContentMaxChars'] . ';
 	if (document.'. $this->formName . '.content.value.length > maxChars) {
 		document.'. $this->formName . '.content.value = document.'. $this->formName . '.content.value.substring(0, maxChars);
 	} else {
-		document.all.kesmallads_maxchars.innerHTML = "' .
+		document.getElementById("kesmallads_maxchars").innerHTML = "' .
 		$this->pi_getLL('maxchars_begin') .
 		'" + (maxChars - document.'. $this->formName . '.content.value.length) + "' .
 		$this->pi_getLL('maxchars_end') . '";
@@ -694,14 +694,18 @@ for (i=0; i<subCategoryList[selectedcat].length; i++) {
 		$content = '<script type="text/javascript">' . "\n";
 		$content .= '/* <![CDATA[ */' . "\n";
 
-		// call the function once to initialize the box
-		$content .= 'renderSubCat();' . "\n";
+		$cat2_configlist = $this->conf['smalladForm.']['dataArray.']['12.']['valueArray.'];
+		$cat3_configlist = $this->conf['cat3.'];
+		if (is_array($cat2_configlist) && count($cat2_configlist) && is_array($cat3_configlist) && count($cat3_configlist)) {
+			// call the function once to initialize the box
+			$content .= 'renderSubCat();' . "\n";
 
-		// add event-listener the select box
-		$content .= 'document.' . $this->formName . '.cat2.onchange = renderSubCat;' . "\n";
+			// add event-listener the select box
+			$content .= 'document.' . $this->formName . '.cat2.onchange = renderSubCat;' . "\n";
+		}
 
-		// add even-listener to content field
 		if ($this->conf['ContentMaxChars'] && $this->conf['checkCharactersLeftWhileTyping']) {
+			// add even-listener to content field
 			$content .= 'document.' . $this->formName . '.content.onkeyup = checkContentLength;' . "\n";
 
 			// call the function to initialize the note about how many characters are left
