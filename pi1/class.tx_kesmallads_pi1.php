@@ -1073,7 +1073,7 @@ for (i=0; i<subCategoryList[selectedcat].length; i++) {
 							.'<h2'.$this->pi_classParam('title').'>'.htmlspecialchars($this->getFieldContent('title')).'</h2>'
 							.'<div'.$this->pi_classParam('content').'>'.$this->getFieldContent('content').'</div>'
 							.($this->getFieldContent('phone') ? '<div'.$this->pi_classParam('phone').'>'.$this->pi_getLL('tx_kesmallads_smallads.phone','phone').': '.htmlspecialchars($this->getFieldContent('phone')).'</div>' : '')
-							.($this->getFieldContent('displayemail') ? '<div'.$this->pi_classParam('email').'>'.$this->pi_getLL('tx_kesmallads_smallads.email','email').': '.$this->getFieldContent('email').'</div>' : '')
+							.(($this->getFieldContent('email') && $this->getFieldContent('displayemail')) ? '<div'.$this->pi_classParam('email').'>'.$this->pi_getLL('tx_kesmallads_smallads.email','email').': '.$this->getFieldContent('email').'</div>' : '')
 						.'</div>'
 					.'</div>'
 					.'<div'.$this->pi_classParam('listdivider').'></div>';
