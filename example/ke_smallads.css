@@ -19,20 +19,20 @@ h2.tx-kesmallads-pi1-title			{ font-size:1.2em; font-weight:bold; margin:0; padd
 .tx-kesmallads-pi1-searchbox-button { border:1px solid black; }
 
 /* edit */
-.error_not_allowed  				{ color:red; }
-.tx-kesmallads-pi1-deletelink a, 
+.tx-kesmallads-pi1 .error_not_allowed  	{ color:red; }
+.tx-kesmallads-pi1 .error  				{ color:red; }
+#kesmallads_maxchars	{ margin:0 0 10px 100px; }
+.tx-kesmallads-pi1-deletelink a,
 .tx-kesmallads-pi1-editlink a 		{ line-height:30px; text-align:center; padding:2px; margin:0 10px 10px 0; width:60px; border:1px dotted; text-decoration:none; color:black; }
 .tx-kesmallads-pi1-editlink a 		{ border-color:green; background:lime;}
-.tx-kesmallads-pi1-deletelink a 	{ border-color:margin; background:red;}
+.tx-kesmallads-pi1-deletelink a 	{ background:red;}
 .tx-kesmallads-pi1-submitDate 	 	{ font-size:.8em; font-style:italic; }
 .tx-kesmallads-pi1-endDate  	 	{ font-size:.8em; font-style:italic; }
 
 /* Pagebrowser */
 .tx-kesmallads-pi1-browsebox {
 	margin:3px;
-	/*border:1px solid black;*/
 	padding:3px;
-	/*background-color:#DDDDDD;*/
 }
 .tx-kesmallads-pi1-browsebox TD {
 	font-size: 10px;
@@ -45,8 +45,6 @@ h2.tx-kesmallads-pi1-title			{ font-size:1.2em; font-weight:bold; margin:0; padd
 }
 
 .tx-kesmallads-pi1-browsebox-SCell {
-	/*background-color: #CCCCCC;*/
-	/*border:1px solid black;*/
 	padding-left:0px; padding-right:3px;
 }
 
@@ -57,7 +55,7 @@ h2.tx-kesmallads-pi1-title			{ font-size:1.2em; font-weight:bold; margin:0; padd
 .tx-kesmallads-pi1-teaser_link		{ font-size:10px; margin-top:3px; display:block;}
 
 /* shortlist view*/
-.tx-kesmallads-pi1-searchresult-shortlist	{ font-size:12px; padding:0 0 0 0; margin:0 0 3px 0; } 
+.tx-kesmallads-pi1-searchresult-shortlist	{ font-size:12px; padding:0 0 0 0; margin:0 0 3px 0; }
 .tx-kesmallads-pi1-searchresult-noresult	{ font-size:12px; padding:0 0 0 0; margin:0 0 3px 0;}
 
 /* mode selector */
@@ -76,8 +74,8 @@ h2.tx-kesmallads-pi1-title			{ font-size:1.2em; font-weight:bold; margin:0; padd
 .tx-kesmallads-pi1 form .smalladform-label-check 		{ float:left; clear:left; width:100px; margin-top:5px;}
 .tx-kesmallads-pi1 form .smalladform-label-check 		{ text-align:right; }
 .tx-kesmallads-pi1 form .smalladform-label-req			{ font-weight:bold; }
-.tx-kesmallads-pi1 form .smalladform-field,	
-.tx-kesmallads-pi1 form .smalladform-field-label,	
+.tx-kesmallads-pi1 form .smalladform-field,
+.tx-kesmallads-pi1 form .smalladform-field-label,
 .tx-kesmallads-pi1 form .smalladform-field-check 		{ margin-top:5px; }
 .tx-kesmallads-pi1 form .smalladform-field-check 		{ margin-left:100px; }
 .tx-kesmallads-pi1 form .smalladform-field-label 		{ clear:left; margin-left:100px; }

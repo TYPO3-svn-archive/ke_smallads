@@ -43,6 +43,8 @@ $LOCAL_LANG = Array (
 		'visible_until' => 'visible until: ',
 		'maxchars_begin' => 'You have ',
 		'maxchars_end' => ' characters left.',
+		'phone_or_email_has_to_be_filled_out' => 'Please fill out phone or email.',
+		'email_address_not_valid' => 'The email address is not valid.',
 	),
 	'dk' => Array (
 		'back' => 'Tilbage',
@@ -88,6 +90,8 @@ $LOCAL_LANG = Array (
 		'visible_until' => 'Sichtbar bis: ',
 		'maxchars_begin' => 'Sie haben noch ',
 		'maxchars_end' => ' Zeichen übrig.',
+		'phone_or_email_has_to_be_filled_out' => 'Bitte geben Sie entweder Ihre Telefonnummer oder Ihre E-Mail-Adresse an..',
+		'email_address_not_valid' => 'Die E-Mail-Adresse ist ungültig.',
 	),
 	'no' => Array (
 	),

@@ -94,6 +94,9 @@ plugin.tx_kesmallads_pi1 {
 	# How many Chars are allowed for the content + title field? If set to zero, no check is done.
 	ContentAndTitleMaxChars = 0
 
+	# Special validation option: phone OR email have to be filled out (please read documentation)
+	phoneOrEmailHasToBeFilledOut = 0
+
 	# Output text when there are too many chars in the content-field (TEXT Content Element)
 	ContentTooManyCharsMessage.value = Your smallad is too long.
 	ContentTooManyCharsMessage.lang.de = Der Text Ihrer Kleinanzeige ist zu lang. Bitte gehen Sie zurück und kürzen Sie sie.

@@ -156,12 +156,29 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 		// do some Checks
 		if (empty($this->conf['pidList'])) return 'Plugin Error: no pidList selected';
 
+		// collect errors in an array
+		$errors = array();
+
 		// Check, if fields have been filled in correctly
 		if (intval($this->conf['ContentMaxChars']) > 0) {
-			if (strlen($this->postVars['content']) > intval($this->conf['ContentMaxChars'])) return $lcObj->TEXT($this->conf['ContentTooManyCharsMessage.']);
+			if (strlen($this->postVars['content']) > intval($this->conf['ContentMaxChars'])) {
+				$errors[] = $lcObj->TEXT($this->conf['ContentTooManyCharsMessage.']);
+			}
 		}
 		if (intval($this->conf['ContentAndTitleMaxChars']) > 0) {
-			if (strlen($this->postVars['content']) + strlen($this->postVars['title']) > intval($this->conf['ContentAndTitleMaxChars'])) return $lcObj->TEXT($this->conf['ContentTooManyCharsMessage.']);
+			if (strlen($this->postVars['content']) + strlen($this->postVars['title']) > intval($this->conf['ContentAndTitleMaxChars'])) {
+				$errors[] = $lcObj->TEXT($this->conf['ContentTooManyCharsMessage.']);
+			}
+		}
+
+		// Special validation option: phone OR email have to be filled out
+		if ($this->conf['phoneOrEmailHasToBeFilledOut'] && empty($this->postVars['phone']) && empty($this->postVars['email'])) {
+			$errors[] = $this->pi_getLL('phone_or_email_has_to_be_filled_out');
+		}
+
+		// if email address has been filled out, validate it
+		if ($this->postVars['email'] && !t3lib_div::validEmail($this->postVars['email'])) {
+			$errors[] = $this->pi_getLL('email_address_not_valid');
 		}
 
 		// Check, if we want to do an update of an existing smallads entry
@@ -169,7 +186,14 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 		if ($this->postVars['edittype']=='update' && $this->postVars['uid']) {
 			$updateRecord = $this->pi_getRecord($this->table,$this->postVars['uid']);
 			if (!$GLOBALS['TSFE']->fe_user->user['uid'] == $updateRecord['fe_user_uid']) unset($updateRecord);
-			if (!is_array($updateRecord)) return '<div class="error_not_allowed">'.$this->pi_getLL('no_allowed_to_update').'</div>';
+			if (!is_array($updateRecord)) {
+				$errors[] = $this->pi_getLL('no_allowed_to_update');
+			}
+		}
+
+		// stop here if we have errors
+		if (count($errors)) {
+			return '<div class="error">' . implode('<br />', $errors) . '</div>';
 		}
 
 		// Insert the new Ad into the DB / Update the ad
