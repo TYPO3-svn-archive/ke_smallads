@@ -1059,14 +1059,23 @@ for (i=0; i<subCategoryList[selectedcat].length; i++) {
 		$editPanel=$this->pi_getEditPanel();
 		if (!$this->searchmode) {
 			$deleteLinkURL = $this->pi_linkTP_keepPIvars_url(array('deleteuid'=>$this->getFieldContent('uid')));
-			$deleteConfirmJS = 'if (confirm("'.$this->pi_getLL('really_delete','Really delete?').'")) window.location.href = "'.$deleteLinkURL.'";';
+			$deleteConfirmJS = 'confirm("' . $this->pi_getLL('really_delete','Really delete?') . '");';
 			// show standard list / long search results list
 			return 	'<div'.($c%2 ? $this->pi_classParam('listrow-odd') : $this->pi_classParam('listrow')).'>'
 						.'<div'.$this->pi_classParam('image').'>'.$this->getFieldContent('image').'</div>'
 						.'<div'.$this->pi_classParam('textcontent').'>'
 
-							.($edit ? '<span'.$this->pi_classParam('editlink').'>'.$this->pi_linkTP_keepPIvars($this->pi_getLL('edit_link'),array('edituid'=>$this->getFieldContent('uid'))).'</span>' : '')
-							.($edit ? '<span'.$this->pi_classParam('deletelink').'>'.'<a href="#" onClick=\''.$deleteConfirmJS.'\'>'.$this->pi_getLL('delete_link').'</a>'.'</span>' : '')
+							.($edit ? '<span' . $this->pi_classParam('editlink').'>' . $this->pi_linkTP_keepPIvars($this->pi_getLL('edit_link'),array('edituid'=>$this->getFieldContent('uid'))).'</span>' : '')
+							.($edit ? '<span' . $this->pi_classParam('deletelink') . '>' .
+									'<a href="'
+									. $deleteLinkURL
+									. '" onClick=\'return '
+									. $deleteConfirmJS
+									. '\'>'
+									. $this->pi_getLL('delete_link')
+									. '</a>'
+									. '</span>'
+									: '')
 							.(($edit && $this->internal['currentRow']['endtime']) ? '<span'.$this->pi_classParam('endDate').'>'.$this->pi_getLL('visible_until').$this->getFieldContent('endtime').'</span>' : '')
 							.($this->conf['displaySubmitDate'] ? '<div'.$this->pi_classParam('submitDate').'>'.$this->getFieldContent('crdate').'</div>' : '')
 							.'<div'.$this->pi_classParam('category').'>'.htmlspecialchars($this->getFieldContent('cat')).'</div>'
