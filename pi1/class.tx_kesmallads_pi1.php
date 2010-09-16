@@ -87,16 +87,16 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 		// mode selector.
 		// check, if the second category has changed. If yes, clear the third
 		// mode selector.
-		if (!$this->piVars['modeselector_cat_old']) {
-			$this->piVars['modeselector_cat_old'] = $this->pi_getLL('list_mode_1');
-		}
-		if (!$this->piVars['modeselector_cat2_old']) {
-			$this->piVars['modeselector_cat2_old'] = $this->pi_getLL('list_mode_1');
-		}
-		if (!$this->piVars['modeselector_cat3_old']) {
-			$this->piVars['modeselector_cat3_old'] = $this->pi_getLL('list_mode_1');
-		}
-		if ($this->conf['modeSelectorType'] != 'buttons') {
+		if ($this->conf['modeSelectorType'] == 'dropdown') {
+			if (!$this->piVars['modeselector_cat_old']) {
+				$this->piVars['modeselector_cat_old'] = $this->pi_getLL('list_mode_1');
+			}
+			if (!$this->piVars['modeselector_cat2_old']) {
+				$this->piVars['modeselector_cat2_old'] = $this->pi_getLL('list_mode_1');
+			}
+			if (!$this->piVars['modeselector_cat3_old']) {
+				$this->piVars['modeselector_cat3_old'] = $this->pi_getLL('list_mode_1');
+			}
 			if ($this->piVars['modeselector_cat'] && $this->piVars['modeselector_cat'] != $this->piVars['modeselector_cat_old']) {
 				unset($this->piVars['modeselector_cat2']);
 				unset($this->piVars['modeselector_cat3']);
@@ -848,8 +848,10 @@ for (i=0; i<subCategoryList[selectedcat].length; i++) {
 					$db_whereClause=' AND cat LIKE "%'.$this->getCategoryName($cat['value'], $this->conf['smalladForm.']['dataArray.']['10.']['valueArray.']).'%"';
 				}
 			}
-		} else {
+		} else if ($this->conf['modeSelectorType'] == 'dropdown') {
 			$db_whereClause .= $this->dropdownModeSelectorFilter();
+		} else if ($this->conf['modeSelectorType'] == 'checkbox') {
+			$db_whereClause .= $this->checkboxModeSelectorFilter();
 		}
 
 		// Find only smallads of this FE User if the "edit"-mode is selected
@@ -877,13 +879,20 @@ for (i=0; i<subCategoryList[selectedcat].length; i++) {
 		$this->internal['currentTable'] = $this->table;
 
 		// start the form for the mode selector and the searchbox
-		$fullTable .= '<form action="' . $this->pi_linkTP_keepPIvars_url() . '" method="POST">';
+
+			// unset the piVars for the checkboxes
+		if ($this->conf['modeSelectorType'] == 'checkbox') {
+			$formAction = $this->pi_getPageLink($GLOBALS['TSFE']->id);
+		} else {
+			$formAction = $this->pi_linkTP_keepPIvars_url();
+		}
+		$fullTable .= '<form action="' . $formAction . '" method="POST">';
 
 		// Adds the mode selector (= categories)
 		if (!$edit && $this->conf['showModeSelector'] && !$this->searchmode) {
 			if ($this->conf['modeSelectorType'] == 'buttons') {
 				$fullTable .= $this->pi_list_modeSelector($items);
-			} else {
+			} else if ($this->conf['modeSelectorType'] == 'dropdown') {
 				$fullTable .= $this->renderDropdownModeSelector($res);
 			}
 		}
@@ -892,6 +901,11 @@ for (i=0; i<subCategoryList[selectedcat].length; i++) {
 		if (!$edit && !$this->searchmode) {
 			//$fullTable .= $this->pi_list_searchBox();
 			$fullTable .= $this->renderSearchBox();
+		}
+
+		// render checkbox mode selector AFTER the searchbox
+		if (!$edit && $this->conf['showModeSelector'] && !$this->searchmode && $this->conf['modeSelectorType'] == 'checkbox') {
+				$fullTable .= $this->renderCheckboxModeSelector($res);
 		}
 
 		// End the form for the searchbox and the mode selector
@@ -941,6 +955,49 @@ for (i=0; i<subCategoryList[selectedcat].length; i++) {
 				$db_whereClause .= ' AND ' . $dbFieldName . ' LIKE "%' . $this->sanitizeData($this->piVars[$modeSelector]) . '%"';
 			}
 		}
+		return $db_whereClause;
+	}/*}}}*/
+
+	/**
+	 * checkboxModeSelectorFilter
+	 *
+	 * compiles the where clause used for filtering the elements selected by
+	 * the checkbox mode selector.
+	 *
+	 * @param string $modes
+	 * @access public
+	 * @return string
+	 */
+	function checkboxModeSelectorFilter() {/*{{{*/
+		$db_whereClause = '';
+
+			// filter only if at least one category is set
+		if (is_array($this->piVars['modeselector_cat'])) {
+			$db_whereClause .= ' AND (';
+			$count = 0;
+			foreach ($this->piVars['modeselector_cat'] as $i => $value) {
+				if ($count) {
+					$db_whereClause .= ' OR ';
+				}
+				$db_whereClause .= ' cat LIKE "%' . $this->sanitizeData($value) . '%"';
+				$count++;
+			}
+			$db_whereClause .= ')';
+		}
+
+		if (is_array($this->piVars['modeselector_cat3'])) {
+			$db_whereClause .= ' AND (';
+			$count = 0;
+			foreach ($this->piVars['modeselector_cat3'] as $i => $value) {
+				if ($count) {
+					$db_whereClause .= ' OR ';
+				}
+				$db_whereClause .= ' cat3 LIKE "%' . $this->sanitizeData($value) . '%"';
+				$count++;
+			}
+			$db_whereClause .= ')';
+		}
+
 		return $db_whereClause;
 	}/*}}}*/
 
@@ -1038,8 +1095,152 @@ for (i=0; i<subCategoryList[selectedcat].length; i++) {
 			}
 		}
 
-		// get all the categories we have entries for
-		// category 1
+		return $content;
+	}
+
+	/**
+	 * renderCheckboxModeSelector
+	 *
+	 * Renders a mode selector with all three categoy-types.
+	 * Uses checkboxes.
+	 * Multiple selection of categories is possible.
+	 *
+	 * @access public
+	 * @return string
+	 */
+	function renderCheckboxModeSelector() {
+		$lcObj=t3lib_div::makeInstance('tslib_cObj');
+		$content = '';
+
+			// get all of the first categories for which we have elements
+			// and compile a comma separated list
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			'cat',
+			$this->table,
+			'pid IN (' . $this->conf['pidList'] . ')' . $lcObj->enableFields($this->table)
+		);
+		$cat1_list = '';
+		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+			if ($row['cat']) {
+				$cat1_list .= $row['cat'] . ',';
+			}
+		}
+		$cat1_list = t3lib_div::uniqueList($cat1_list);
+
+			// second category: Get all categories we have elements for
+		$cat2_list = '';
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			'cat2',
+			$this->table,
+			'pid IN (' . $this->conf['pidList'] . ')' . $lcObj->enableFields($this->table)
+		);
+		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+			if ($row['cat2']) {
+				$cat2_list .= $row['cat2'] . ',';
+			}
+		}
+		$cat2_list = t3lib_div::uniqueList($cat2_list);
+
+			// third category (subcategory): Get all categories we have elements for
+		$cat3_list = '';
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			'cat3',
+			$this->table,
+			'pid IN (' . $this->conf['pidList'] . ')' . $lcObj->enableFields($this->table)
+		);
+		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+			if ($row['cat3']) {
+				$cat3_list .= $row['cat3'] . ',';
+			}
+		}
+		$cat3_list = t3lib_div::uniqueList($cat3_list);
+
+			/****************************************
+			* Render the Checkboxes
+			****************************************/
+			// Categories are stored as real names in the databases, so we
+			// can use them directly as values for the select field
+		if ($cat1_list) {
+			$content .= '<div class="cat1">';
+			foreach(t3lib_div::trimExplode(',', $cat1_list) as $key => $value) {
+
+					// Find out if this is checked
+				if (is_array($this->piVars['modeselector_cat']) && in_array($value, $this->piVars['modeselector_cat'])) {
+					$checked = 'checked="checked"';
+				} else {
+					$checked = '';
+				}
+
+				$content .= '<input type="checkbox" name="'
+					. $this->prefixId . '[modeselector_cat][]" value="'
+					. $value . '"' . $checked . '>' . $value . '<br />';
+			}
+			$content .= '</div>';
+		}
+
+		if ($cat2_list) {
+			$content .= '<div class="cat2">';
+			foreach ($this->conf['smalladForm.']['dataArray.']['12.']['valueArray.'] as $cat_conf) {
+
+					// get label of this category
+				$cat_TEXT_obj = array(
+					'value' => $cat_conf['label'],
+					'lang.' => $cat_conf['label.']['lang.']
+				);
+				$cat_label = trim($lcObj->TEXT($cat_TEXT_obj));
+
+				// Don't render checkboxes for the 2. level category
+				/*
+				// TODO: Find out if this is checked
+				// $checked = 'checked="checked"';
+				$checked = '';
+
+				$content .= '<input type="checkbox" name="'
+					. $this->prefixId . '[modeselector_cat2][]" value="'
+					. $cat_label . '"' . $checked . '>' . $cat_label . '<br />';
+				*/
+
+				$content .= $cat_label . '<br />';
+
+					// render the sub-categories
+				foreach ($this->conf['cat3.'] as $sub_cat_conf) {
+					$content_subcat = '';
+
+						// get label of this category
+					$sub_cat_label = trim($lcObj->TEXT($sub_cat_conf));
+
+						// render the sub-category if there is at least one
+						// element and it belongs to the currently rendered
+						// category of level 2
+					if ($sub_cat_conf['belongsTo'] == $cat_conf['value'] && t3lib_div::inList($cat3_list, $sub_cat_label)) {
+
+							// Find out if this is checked
+						if (is_array($this->piVars['modeselector_cat3']) && in_array($sub_cat_label, $this->piVars['modeselector_cat3'])) {
+							$checked = 'checked="checked"';
+						} else {
+							$checked = '';
+						}
+
+						$content_subcat .= '<input type="checkbox" name="'
+							. $this->prefixId . '[modeselector_cat3][]" value="'
+							. $sub_cat_label . '"' . $checked . '>' . $sub_cat_label . '<br />';
+					}
+
+						// wrap a div
+					if ($content_subcat) {
+						$content_subcat = '<div class="cat3">' . $content_subcat . '</div>';
+						$content .= $content_subcat;
+					}
+				}
+			}
+			$content .= '</div>';
+		}
+
+			// render submit button
+		$content .= '<input type="submit" value="'
+			. $this->pi_getLL('checkbox_submit_button')
+			. '" class="submit" />';
+
 		return $content;
 	}
 

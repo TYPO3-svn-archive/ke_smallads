@@ -85,6 +85,11 @@ h2.tx-kesmallads-pi1-title			{ font-size:1.2em; font-weight:bold; margin:0; padd
 .tx-kesmallads-pi1 form input.submitclass				{ border:1px solid black; margin-bottom:0;}
 .tx-kesmallads-pi1 form textarea.inputclass				{ border:1px solid black; margin-bottom:0;}
 
+/* checkbox mode selecter */
+.tx-kesmallads-pi1 .cat2		{ margin-top:10px; }
+.tx-kesmallads-pi1 .cat3		{ margin-left:20px; }
+.tx-kesmallads-pi1 .submit 		{ border:1px solid black; }
+
 
 /* These are the styles for the old table layout form.
  * Just uncomment them, if you still want to use the table layout.

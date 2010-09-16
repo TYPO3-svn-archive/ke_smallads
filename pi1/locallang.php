@@ -7,6 +7,7 @@
 
 $LOCAL_LANG = Array (
 	'default' => Array (
+		'checkbox_submit_button' => 'OK',
 		'fileupload.error.nodir' => 'Error while uploading the image: Image upload directory does not exist.',
 		'fileupload.error.toobig' => 'Error while uploading the image: Image size is too big.',
 		'fileupload.error.mimenotallowed' => 'Error while uploading the image: File not allowed.',
