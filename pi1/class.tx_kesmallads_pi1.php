@@ -313,6 +313,33 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 						);
 			}
 
+				// notify group of frontend users
+				// thanks to Walter Kruml walter@opaque.at
+			if ($this->conf['notifyEmailFEGroup']) {
+				$emaildata = $this->conf['notifyEmailFEGroup.'];
+				if ($emaildata && (!empty($insertFields['email']) || is_array($updateRecord))) {
+					$where_clause = $GLOBALS['TYPO3_DB']->listQuery('usergroup', $this->conf['notifyEmailFEGroup.']['FE_UserGroup'], 'fe_users');
+					$where_clause .= $this->cObj->enableFields('fe_users');
+					$rowArray = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('uid,email', 'fe_users', $where_clause);
+					if (is_array($rowArray))	{
+						foreach ($rowArray as $row)	{
+							$emaildata['body'] = str_replace("|","\n",$emaildata['body']);
+							t3lib_div::plainMailEncoded(
+								$row['email'],
+								$emaildata['subject'],
+								sprintf(
+									$emaildata['body'],
+									$GLOBALS['TSFE']->page['title'] . ', ' . $insertFields['cat'] . "\n",
+									html_entity_decode($insertFields['title']) . "\n",
+									html_entity_decode($insertFields['content']) . "\n"
+								),
+								'From: '.$emaildata['fromName'].' <'.$emaildata['fromEmail'].'>'
+							);
+						}
+					}
+				}
+			}
+
 			if (!is_array($updateRecord)) {
 				$content .= $lcObj->TEXT($this->conf['newadCreated.']);
 			} else {
@@ -597,7 +624,6 @@ class tx_kesmallads_pi1 extends tslib_pibase {
 
 			//$formContent = str_replace('textarea name="content"', 'textarea name="content" onKeyUp="checkContentLength();"', $formContent);
 			$formContent = str_replace('</textarea>', '</textarea><p id="kesmallads_maxchars"></p>', $formContent);
-			//debug($formContent);
 		}
 
 		// form content to the main content
