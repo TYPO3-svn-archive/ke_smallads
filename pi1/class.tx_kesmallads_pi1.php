@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2005 Christian Bülter (buelter@kennziffer.com)
+*  (c) 2005 Christian Bï¿½lter (buelter@kennziffer.com)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -24,7 +24,7 @@
 /**
  * Plugin 'Smallads' for the 'ke_smallads' extension.
  *
- * @author	Christian Bülter <buelter@kennziffer.com>
+ * @author	Christian Bï¿½lter <buelter@kennziffer.com>
  */
 
 
@@ -760,8 +760,14 @@ for (i=0; i<subCategoryList[selectedcat].length; i++) {
 		// enable backward compatibility for "teaserNum"
 		if (!empty($this->conf['teaserNum']) && empty($lConf['results_at_a_time'])) $lConf['results_at_a_time']=$this->conf['teaserNum'];
 
-		$this->internal['results_at_a_time']=t3lib_div::intInRange(intval($lConf['results_at_a_time']),0,1000,3);		// Number of results to show in a listing.
-		$this->internal['maxPages']=t3lib_div::intInRange($lConf['maxPages'],0,1000,5);		// The maximum number of "pages" in the browse-box: "Page 1", "Page 2", etc.
+		// Number of results to show in a listing.
+		$this->internal['results_at_a_time'] = t3lib_utility_Math::forceIntegerInRange($lConf['results_at_a_time'], 0, 10000);
+		if (!$this->internal['results_at_a_time']) $this->internal['results_at_a_time'] = 3;
+
+		// The maximum number of "pages" in the browse-box: "Page 1", "Page 2", etc.
+		$this->internal['maxPages'] = t3lib_utility_Math::forceIntegerInRange($lConf['maxPages'], 0, 10000);
+		if (!$this->internal['maxPages']) $this->internal['maxPages'] = 5;
+
 		$this->internal['searchFieldList']='content,phone,email,title,cat';
 
 		// will only work with MySQL
@@ -863,8 +869,10 @@ for (i=0; i<subCategoryList[selectedcat].length; i++) {
 		$this->internal['orderBy'] 				= $this->conf['listOrder'];
 		$this->internal['descFlag'] 			= $this->conf['listOrderDescFlag'];
 		$this->internal['orderByList'] 			= $this->conf['listOrder'];
-		$this->internal['results_at_a_time'] 	= t3lib_div::intInRange($lConf['results_at_a_time'],0,1000,2);
-		$this->internal['maxPages']				= t3lib_div::intInRange($lConf['maxPages'],0,1000,2);
+		$this->internal['results_at_a_time'] = t3lib_utility_Math::forceIntegerInRange($lConf['results_at_a_time'], 0, 10000);
+		if (!$this->internal['results_at_a_time']) $this->internal['results_at_a_time'] = 2;
+		$this->internal['maxPages'] = t3lib_utility_Math::forceIntegerInRange($lConf['maxPages'], 0, 10000);
+		if (!$this->internal['maxPages']) $this->internal['maxPages'] = 2;
 		$this->internal['searchFieldList']		= 'content,phone,email,title,cat';
 
 		// Get number of Smallads
