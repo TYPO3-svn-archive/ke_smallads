@@ -9,9 +9,7 @@ t3lib_extMgm::addTypoScript($_EXTKEY,'editorcfg','
 	tt_content.CSS_editor.ch.tx_kesmallads_pi1 = < plugin.tx_kesmallads_pi1.CSS_editor
 ',43);
 
-
 t3lib_extMgm::addPItoST43($_EXTKEY,'pi1/class.tx_kesmallads_pi1.php','_pi1','list_type',0);
-
 
 t3lib_extMgm::addTypoScript($_EXTKEY,'setup','
 	tt_content.shortcut.20.0.conf.tx_kesmallads_smallads = < plugin.'.t3lib_extMgm::getCN($_EXTKEY).'_pi1
@@ -37,14 +35,4 @@ RTE.config.tx_kesmallads_smallads.content {
   ignoreMainStyleOverride = 1
 }
 ');
-
-// get TYPO3 version number as an integer
-if (class_exists('TYPO3\\CMS\\Core\\Utility\\VersionNumberUtility')) {
-	define('TYPO3_VERSION_INTEGER', \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(TYPO3_version));
-} else if (class_exists('t3lib_utility_VersionNumber')) {
-	define('TYPO3_VERSION_INTEGER', t3lib_utility_VersionNumber::convertVersionNumberToInteger(TYPO3_version));
-} else {
-	define('TYPO3_VERSION_INTEGER', t3lib_div::int_from_ver(TYPO3_version));
-}
-  
 ?>
