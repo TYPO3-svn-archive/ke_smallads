@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2005 Christian B�lter (buelter@kennziffer.com)
+*  (c) 2005 Christian Bülter (buelter@kennziffer.com)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -24,12 +24,14 @@
 /**
  * Plugin 'Smallads' for the 'ke_smallads' extension.
  *
- * @author	Christian B�lter <buelter@kennziffer.com>
+ * @author	Christian Bülter <buelter@kennziffer.com>
  */
 
 
-require_once(PATH_tslib.'class.tslib_pibase.php');
-require_once(PATH_t3lib.'class.t3lib_basicfilefunc.php'); // needed for checking filenames when uploading pictures
+if (TYPO3_VERSION_INTEGER < 6002000) {
+	require_once(PATH_tslib.'class.tslib_pibase.php');
+	require_once(PATH_t3lib.'class.t3lib_basicfilefunc.php'); // needed for checking filenames when uploading pictures
+}
 
 class tx_kesmallads_pi1 extends tslib_pibase {
 	var $prefixId='tx_kesmallads_pi1';						// Same as class name

@@ -34,7 +34,7 @@ plugin.tx_kesmallads_pi1 {
 		subject = [SMALLAD] New Smallad
 		toEmail =
 		body = A new smallad has been submitted.|Category: %s|Title: %s|Text: %s
-		fromName = Smallads Extension
+		fromName = Smallads
 		fromEmail =
 	}
 
@@ -44,7 +44,7 @@ plugin.tx_kesmallads_pi1 {
 		subject = [SMALLAD] Updated Smallad
 		toEmail =
 		body = A smallad has been updated.|Category: %s|Title: %s|Text: %s
-		fromName = Smallads Extension
+		fromName = Smallads
 		fromEmail =
 	}
 

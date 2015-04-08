@@ -37,5 +37,14 @@ RTE.config.tx_kesmallads_smallads.content {
   ignoreMainStyleOverride = 1
 }
 ');
+
+// get TYPO3 version number as an integer
+if (class_exists('TYPO3\\CMS\\Core\\Utility\\VersionNumberUtility')) {
+	define('TYPO3_VERSION_INTEGER', \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(TYPO3_version));
+} else if (class_exists('t3lib_utility_VersionNumber')) {
+	define('TYPO3_VERSION_INTEGER', t3lib_utility_VersionNumber::convertVersionNumberToInteger(TYPO3_version));
+} else {
+	define('TYPO3_VERSION_INTEGER', t3lib_div::int_from_ver(TYPO3_version));
+}
   
 ?>

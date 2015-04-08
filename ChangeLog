@@ -1,5 +1,50 @@
-(add new changes on top of this file)
+Version 1.3.0 (2015/04)
+* made compatible with TYPO3 6.2
 
-05-06-30 Christian B�lter  <buelter@kennziffer.com>
+Version 1.2.0 (2012/12) [version number was not updated]
+* made compatible with TYPO3 CMS 4.7 and 6.0, removed calls to deprecated functions
 
-	* Initial release
+Version 1.2.0 (2010/09) 
+* updated the manual
+* New feature: send mail to a usergroup (not only single user). See typoscript setup. Thanks to Walter Kruml.
+* Removed some options from RTE.
+* Added greek translation. Thanks to Stefanos Karasavvidis.
+* New feature: multi-category selection. Thanks for sponsoring to enorMedia GmbH & Co.KG.
+* Version 1.1.3 (2010/06)
+* New feature: check characters left in content-field dynamically while typing (“You have 123 characters left.”). Uses javascript. TS-option: checkCharactersLeftWhileTyping.
+* New feature: Either phone number or email address has to be filled out.
+* Bugfix: “iscommercial” was non saved to database, therefore it was alwas empty.
+* added "back" function if an error appears
+* fixed pagebrowser (“pagefloat = center”)
+* fixed javascript for confirmation of deletion of a smallad
+
+Version 1.1.0 (2009/05)
+* New feature: Two new categories, (Category 2 and Category 3), where Category 3 depends on the selection of Category 2 (the second category can have a sub-category which changes dynamically). Thanks to Reiner H. Nitschke Verlags GmbH for sponsoring the new dynamic category feature.
+* In the list view, there are new filter options. Only the categories for wich smallads exist appear in these filters.
+* Removing tags from submitted fields. The content field (and all the others of course) is not a RTE field in the frontend, so it is consequent to not allow the user to submit HTML. Although, the backend field ist still a RTE field. This is for historical reasons.
+* Searchbox and mode selector don't disappear anymore after submitting a search word or selecting a mode/category.
+* New TS-Option: ContentAndTitleMaxChars
+
+Version 1.0.4 (2008/04)
+* Bug fix: Chmod for uploaded images did not work correctly. On some servers the uploaded image could not be enlarged.
+* Added some french translation.
+
+Version 1.0.2 (2007/03)
+* removed “htmlentities”-command when a new smallad is inserted, so german umlaute get stored correctly
+* minor changes to the documentation
+
+Version 1.0.1 (2006/11)
+* new configuration option listView.mode (see “More options”)
+
+Version 1.0.0 (2006/10)
+* New feature: Logged in users may now edit their own smallads or delete them.
+* New feature: Users may now set the time for the smallad until it disappears (in days).
+* The order of the smallads in the list view can now be set via typoscript.
+* An error message is displayed in the frontend if no static template is included.
+* The form for a new smallad is now rendered without tables to provide accessibility. You may have to adjust your css. If you want the old table layout, just have look into the setup.txt in the extension folder (you have to uncomment some lines there).
+* If linebreaks are used in the “content”-field, they are now shown in the frontend.
+* In the backend module there is now a new mode “export all smallads”.
+* Added new languages: finnish, netherlands
+
+05-06-30 
+* Initial release

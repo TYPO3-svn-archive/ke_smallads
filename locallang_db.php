@@ -39,30 +39,30 @@ $LOCAL_LANG = Array (
 		'tx_kesmallads_smallads.content' => 'Inhalt',
 		'tx_kesmallads_smallads.image' => 'Bild',
 		'tx_kesmallads_smallads.displayemail' => 'Soll die E-Mail-Adresse angezeigt werden?',
-		'tx_kesmallads_smallads.title' => 'Überschrift',
+		'tx_kesmallads_smallads.title' => 'Ãœberschrift',
 		'tx_kesmallads_smallads.reviewed' => 'freigegeben',
 		'tt_content.list_type_pi1' => 'Kleinanzeigen',
 		'tx_kesmallads_smallads.fe_user_uid' => 'Frontend Benutzer',
 		'tx_kesmallads_smallads.comment' => 'Kommentar/Rechnungsadresse',
 		'tx_kesmallads_smallads.iscommercial.I.0' => 'nein',             
 		'tx_kesmallads_smallads.iscommercial.I.1' => 'ja',             
-		'tx_kesmallads_smallads.iscommercial' => 'Kommerzielle Kleinanzeige/Kleinanzeige eines Händlers?'
+		'tx_kesmallads_smallads.iscommercial' => 'Kommerzielle Kleinanzeige/Kleinanzeige eines HÃ¤ndlers?'
 	),
 	'no' => Array (
 	),
 	'it' => Array (
 	),
 	'fr' => Array (
-        'tx_kesmallads_smallads.user' => 'Séléction utilisateur',
-		'tx_kesmallads_smallads.phone' => 'Téléphone',
+        'tx_kesmallads_smallads.user' => 'Sï¿½lï¿½ction utilisateur',
+		'tx_kesmallads_smallads.phone' => 'Tï¿½lï¿½phone',
 		'tx_kesmallads_smallads.email' => 'Email',
 		'tx_kesmallads_smallads' => 'Smallads',
-		'tx_kesmallads_smallads.cat' => 'Catégorie',
+		'tx_kesmallads_smallads.cat' => 'Catï¿½gorie',
 		'tx_kesmallads_smallads.content' => 'Texte',
 		'tx_kesmallads_smallads.image' => 'Image',
 		'tx_kesmallads_smallads.displayemail' => 'Afficher l\'adresse email?',
 		'tx_kesmallads_smallads.title' => 'Titre',
-		'tx_kesmallads_smallads.reviewed' => 'Visé',
+		'tx_kesmallads_smallads.reviewed' => 'Visï¿½',
 		'tt_content.list_type_pi1' => 'Smallads',
 		'tx_kesmallads_smallads.fe_user_uid' => 'Frontend User',
 		'tx_kesmallads_smallads.comment' => 'Commentaire',
@@ -88,7 +88,7 @@ $LOCAL_LANG = Array (
 		'tx_kesmallads_smallads.comment' => 'Commentaar',
 		'tx_kesmallads_smallads.iscommercial.I.0' => 'nee',
 		'tx_kesmallads_smallads.iscommercial.I.1' => 'ja',
-		'tx_kesmallads_smallads.iscommercial' => 'Is dit een commcerciële advertentie?'
+		'tx_kesmallads_smallads.iscommercial' => 'Is dit een commcerciï¿½le advertentie?'
 	),
 	'cz' => Array (
 	),

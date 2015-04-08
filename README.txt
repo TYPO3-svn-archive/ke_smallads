@@ -1,8 +1,8 @@
 /***************************************************************
-*  (c) 2005 Christian Bülter (buelter@kennziffer.com)
+*  (c) 2005 Christian BÃ¼lter (buelter@kennziffer.com)
 *  All rights reserved
 ***************************************************************/
 
-You can find documentation here: 
+You can find the documentation here:
 
 http://typo3.org/documentation/document-library/extension-manuals/ke_smallads/current/
