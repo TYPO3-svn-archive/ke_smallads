@@ -27,12 +27,6 @@
  * @author	Christian Bülter <buelter@kennziffer.com>
  */
 
-
-if (TYPO3_VERSION_INTEGER < 6002000) {
-	require_once(PATH_tslib.'class.tslib_pibase.php');
-	require_once(PATH_t3lib.'class.t3lib_basicfilefunc.php'); // needed for checking filenames when uploading pictures
-}
-
 class tx_kesmallads_pi1 extends tslib_pibase {
 	var $prefixId='tx_kesmallads_pi1';						// Same as class name
 	var $scriptRelPath='pi1/class.tx_kesmallads_pi1.php';	// Path to this script relative to the extension dir.
